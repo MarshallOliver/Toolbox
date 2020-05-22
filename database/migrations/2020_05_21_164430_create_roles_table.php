@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSignageTable extends Migration
+class CreateRolesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,11 @@ class CreateSignageTable extends Migration
      */
     public function up()
     {
-        Schema::create('signage', function (Blueprint $table) {
+        Schema::create('roles', function (Blueprint $table) {
             $table->id();
+            $table->string('name')->unique();
+            $table->jsonb('permissions');
             $table->timestamps();
-            $table->string('name');
-            $table->string('details');
-            $table->foreignId('database_id')
-                ->constrained('databases')
-                ->onDelete('cascade');
         });
     }
 
@@ -31,6 +28,6 @@ class CreateSignageTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('signage');
+        Schema::dropIfExists('roles');
     }
 }

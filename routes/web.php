@@ -13,14 +13,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('home');
+Route::view('/', 'welcome');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/dpl', function () {
+	return view('tools.dpl');
 });
 
-Route::resources([
-	'locations' => 'LocationController',
-	'signage' => 'SignageController',
-	
-]);
-
-Route::resource('locations.databases', 'LocationDatabaseController');
+Route::post('/dpl', 'DPLController@generate');

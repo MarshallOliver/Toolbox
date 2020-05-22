@@ -1,5 +1,0 @@
-[15-May-2020 15:27:33 UTC] PHP Parse error:  syntax error, unexpected '\' (T_NS_SEPARATOR), expecting identifier (T_STRING) in C:\web\toolbox.andrettikarting.com\app\Http\Kernel.php on line 23
-[19-May-2020 22:49:07 UTC] PHP Fatal error:  Constant expression contains invalid operations in C:\web\toolbox.andrettikarting.com\app\Location.php on line 21
-[19-May-2020 22:50:31 UTC] PHP Fatal error:  Constant expression contains invalid operations in C:\web\toolbox.andrettikarting.com\app\Location.php on line 21
-[20-May-2020 13:06:19 UTC] PHP Fatal error:  Constant expression contains invalid operations in C:\web\toolbox.andrettikarting.com\app\Location.php on line 21
-[20-May-2020 13:06:20 UTC] PHP Fatal error:  Constant expression contains invalid operations in C:\web\toolbox.andrettikarting.com\app\Location.php on line 21

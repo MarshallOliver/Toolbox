@@ -1,24 +1,28 @@
-@extends('layouts.main')
-
-@section('title', 'Home')
+@extends('layouts.app')
 
 @section('content')
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">Dashboard</div>
 
-<div class="section">
-	<div class="container">
+                <div class="card-body">
+                    @if (session('status'))
+                        <div class="alert alert-success" role="alert">
+                            {{ session('status') }}
+                        </div>
+                    @endif
 
-		<h1 class="title">Welcome to Toolbox</h1>
-		<p class="subtitle">
-			A collection of tools for manipulating <a href="http://www.centeredgesoftware.com/" target="#">CenterEdge Software</a> data and simplifying other tasks common in the <strong>Family Entertainment</strong> industry
-		</p>
+                    <p>Select a tool:</p>
 
-		<h2>Select a tool:</h2>
-		<ul>
-			<li><a href="/dpl">DPL Generator</a></li>
-			<li><a href="/signage">Signage</a></li>
-		</ul>
+                    <ul class="list-unstyled">
+                        <li><a href="/dpl">DPL Generator</a></li>
+                    </ul>
 
-	</div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-
 @endsection
