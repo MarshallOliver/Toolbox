@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="container">
+<div class="container-fluid">
 	<div class="row">
 		<div class="col">
 		
@@ -38,24 +38,24 @@
 			<table id="dpl-table" class="table">
 				<thead>
 					<tr>
-						<th scope="col" style="display:none;">SKU</th>
+						<th scope="col">SKU</th>
 						<th scope="col">Barcode</th>
 						<th scope="col">Description</th>
-						<th scope="col" style="display:none;">Sales Unit</th>
+						<th scope="col">Sales Unit</th>
 						<th scope="col">Total Quantity</th>
 						<th scope="col">Unit Price</th>
 						<th scope="col">Tickets</th>
 						<th scope="col">Count Per Unit</th>
 						<th scope="col">Item Price</th>
-						<th scope="col"><button id="add-row" class="btn btn-primary">Add Row</button></th>
+						<th scope="col"><button id="add-row" class="btn btn-block btn-primary">Add Row</button></th>
 					</tr>
 				</thead>
 				<tbody class="dpl-form-row">
 					<tr>
-						<td style="display:none;"><input name="sku[]" class="form-control" type="text" /><</td>
+						<td><input name="sku[]" class="form-control" type="text" /></td>
 						<td><input name="barcode[]" class="form-control" type="text" /></td>
 						<td><input name="description[]" class="form-control" type="text" maxlength="30" required /></td>
-						<td style="display:none;">
+						<td>
 							<select name="sales_unit[]" class="form-control" required>
 								<option selected value="each">EACH</option>
 								<option value="inner">INNER</option>
@@ -67,7 +67,7 @@
 						<td><input name="tickets[]" class="form-control" type="number" required /></td>
 						<td><input name="count_per_unit[]" class="form-control" type="number" required /></td>
 						<td><input name="item_price[]" class="form-control" type="number" step="0.01" min="0" required /></td>
-						<td><button type="button" id="remove-row" class="btn btn-danger">Delete</button></td>
+						<td><button type="button" id="remove-row" class="btn btn-block btn-danger">Delete</button></td>
 					</tr>
 				</tbody>
 
