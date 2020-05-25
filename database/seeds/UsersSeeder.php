@@ -13,9 +13,9 @@ class UsersSeeder extends Seeder
     public function run()
     {
         $default = User::create([
-        	'name' => 'Andretti',
-        	'email' => 'support@andrettikarting.com',
-        	'password' => Hash::make('Andretti'),
+        	'name' => env('ADMIN_NAME', 'Super User'),
+        	'email' => env('ADMIN_EMAIL', 'fake@yourapp.com'),
+        	'password' => Hash::make(env('ADMIN_PASSWORD', 'password')),
         ]);
     }
 }
