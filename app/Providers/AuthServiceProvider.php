@@ -26,6 +26,7 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
         $this->registerUpdateScreensPolicies();
         $this->registerLocationPolicies();
+        $this->registerLocationDatabasePolicies();
 
     }
 
@@ -60,5 +61,22 @@ class AuthServiceProvider extends ServiceProvider
             return $user->hasAccess(['destroy-locations']);
         });
 
+    }
+
+    public function registerLocationDatabasePolicies()
+    {
+        
+        Gate::define('create-databases', function (\App\User $user) {
+            return $user->hasAccess(['create-databases']);
+        });
+
+        Gate::define('edit-databases', function (\App\User $user) {
+            return $user->hasAccess(['edit-databases']);
+        });
+
+        Gate::define('destroy-databases', function (\App\User $user) {
+            return $user->hasAccess(['destroy-databases']);
+        });
+    
     }
 }

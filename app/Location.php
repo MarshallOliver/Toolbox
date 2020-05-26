@@ -18,8 +18,8 @@ class Location extends Model
 
 	];
 
-    // public function databases() {
-    // 	return $this->hasMany('App\Database');
-    // }
+    public function databases() {
+    	return $this->hasMany('App\Database');
+    }
 
 }

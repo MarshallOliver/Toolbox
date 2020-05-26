@@ -6,6 +6,12 @@ use Illuminate\Http\Request;
 
 class DPLController extends Controller
 {
+
+    public function index() 
+    {
+        return view('tools.dpl');
+    }
+
     public function generate(Request $request)
     {
 
