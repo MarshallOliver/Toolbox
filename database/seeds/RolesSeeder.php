@@ -15,14 +15,25 @@ class RolesSeeder extends Seeder
         $administrator = Role::create([
         	'name' => 'Administrator',
         	'permissions' => [
-        		'view-location' => true,
+                'update-screens' => true,
+        		'list-locations' => true,
+                'create-locations' => true,
+                'view-locations' => true,
+                'edit-locations' => true,
+                'destroy-locations' => true,
+
         	]
         ]);
 
         $user = Role::create([
         	'name' => 'User',
         	'permissions' => [
-        		'view-location' => false,
+                'update-screens' => false,
+                'list-locations' => false,
+                'create-locations' => false,
+                'view-locations' => false,
+                'edit-locations' => false,
+                'destroy-locations' => false,
         	]
         ]);
     }

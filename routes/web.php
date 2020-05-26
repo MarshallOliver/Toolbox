@@ -13,7 +13,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::view('/', 'welcome');
+Route::get('/', function () {
+	if(!Auth::check()) {
+		return view('welcome');
+	} else {
+		return redirect('/home');
+	}
+});
 
 Auth::routes();
 
@@ -24,3 +30,35 @@ Route::get('/dpl', function () {
 });
 
 Route::post('/dpl', 'DPLController@generate');
+
+Route::group(['prefix' => 'locations'], function () {
+
+	Route::get('/', 'LocationController@index')
+		->middleware('can:list-locations')
+		->name('locations.index');
+
+	Route::get('/create', 'LocationController@create')
+		->middleware('can:create-locations')
+		->name('locations.create');
+
+	Route::post('/', 'LocationController@store')
+		->middleware('can:create-locations')
+		->name('locations.store');
+
+	Route::get('/{location}', 'LocationController@show')
+		->middleware('can:view-locations')
+		->name('locations.show');
+
+	Route::get('/{location}/edit', 'LocationController@edit')
+		->middleware('can:edit-locations')
+		->name('locations.edit');
+
+	Route::put('/{location}', 'LocationController@update')
+		->middleware('can:edit-locations')
+		->name('locations.update');
+
+	Route::delete('/{location}', 'LocationController@destroy')
+		->middleware('can:destroy-locations')
+		->name('locations.destroy');
+
+});
