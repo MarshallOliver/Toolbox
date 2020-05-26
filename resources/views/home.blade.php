@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col">
             <div class="card">
                 <div class="card-header">Dashboard</div>
 
@@ -18,6 +18,9 @@
 
                     <ul class="list-unstyled">
                         <li><a href="/dpl">DPL Generator</a></li>
+                        @can('update-screens')
+                            <li><a href="/button-updates">Button Updates</a></li>
+                        @endcan
                     </ul>
 
                 </div>
