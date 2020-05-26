@@ -88,7 +88,7 @@ class LocationController extends Controller
     {
 
         // $location = Location::with('databases')->findOrFail($id);
-        $location = Location::findOrFail($id);
+        $location = Location::with('databases')->findOrFail($id);
 
         return view('locations.edit', ['location' => $location]);
     }

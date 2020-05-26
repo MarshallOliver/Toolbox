@@ -25,11 +25,11 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('/dpl', function () {
-	return view('tools.dpl');
-});
-
+Route::get('/dpl', 'DPLController@index');
 Route::post('/dpl', 'DPLController@generate');
+
+Route::get('/button-updates', 'ButtonUpdateController@index');
+Route::post('/button-udpates', 'ButtonUpdateController@execute');
 
 Route::group(['prefix' => 'locations'], function () {
 
@@ -60,5 +60,25 @@ Route::group(['prefix' => 'locations'], function () {
 	Route::delete('/{location}', 'LocationController@destroy')
 		->middleware('can:destroy-locations')
 		->name('locations.destroy');
+
+	Route::get('/{location}/databases/create', 'LocationDatabaseController@create')
+		->middleware('can:create-databases')
+		->name('locations.databases.create');
+
+	Route::post('/{location}/databases', 'LocationDatabaseController@store')
+		->middleware('can:create-databases')
+		->name('locations.databases.store');
+
+	Route::get('/{location}/databases/{database}/edit', 'LocationDatabaseController@edit')
+		->middleware('can:edit-databases')
+		->name('locations.databases.edit');
+
+	Route::put('/{location}/databases/{database}', 'LocationDatabaseController@update')
+		->middleware('can:edit-databases')
+		->name('locations.databases.update');
+
+	Route::delete('/{location}/databases/{database}', 'LocationDatabaseController@destroy')
+		->middleware('can:destroy-databases')
+		->name('locations.databases.destroy');
 
 });

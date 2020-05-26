@@ -21,6 +21,9 @@ class RolesSeeder extends Seeder
                 'view-locations' => true,
                 'edit-locations' => true,
                 'destroy-locations' => true,
+                'create-databases' => true,
+                'edit-databases' => true,
+                'destroy-databases' => true,
 
         	]
         ]);
@@ -34,7 +37,11 @@ class RolesSeeder extends Seeder
                 'view-locations' => false,
                 'edit-locations' => false,
                 'destroy-locations' => false,
-        	]
+                'create-databases' => false,
+                'edit-databases' => false,
+                'destroy-databases' => false,
+
+            ]
         ]);
     }
 }
