@@ -26,7 +26,7 @@ class ButtonUpdateController extends Controller
 
         $result = DB::connection($request->database)->transaction(function () use ($request) {
 
-            DB::select('SELECT ps.StationNo, ps.DivNo, ps.ScreenName, ps.ScreenEnable INTO #tempState FROM PosScreens ps');
+            DB::connection($request->database)->select('SELECT ps.StationNo, ps.DivNo, ps.ScreenName, ps.ScreenEnable INTO #tempState FROM PosScreens ps');
             DB::connection($request->database)->select('SELECT DISTINCT ps.StationNo, divs.DivNo, ps.ScreenID, ps.ScreenName, ps.ModuleID INTO #tempScreens FROM PosScreens ps, Divisions divs WHERE ps.StationNo = 0 AND ps.DivNo = 0');
             DB::connection($request->database)->select('SELECT DISTINCT #TempScreens.StationNo, #TempScreens.DivNo, #TempScreens.ScreenID, #TempScreens.ScreenName, CASE WHEN #TempState.ScreenEnable IS NULL THEN 1 ELSE #TempState.ScreenEnable END AS ScreenEnable, #TempScreens.ModuleID INTO #tempScreensWithState FROM #TempScreens LEFT JOIN #TempState ON #TempScreens.StationNo = #TempState.StationNo AND #TempScreens.DivNo = #TempState.DivNo AND #TempScreens.ScreenName = #TempState.ScreenName');
             DB::connection($request->database)->select('SELECT DISTINCT ps.StationNo, ps.DivNo, pk.ScreenID, pk.KeyID, pk.DayOfWeek, pk.TimeOfDay, pk.ButtonCaption, pk.CaptionColor, pk.CaptionFontName, pk.CaptionFontSize, pk.CaptionFontStyle, pk.CaptionAlign, pk.ButtonColor, pk.ButtonDesc, pk.Enabled, pk.HeadCount, pk.GroupingNo, CAST(pk.ButtonImage AS VARBINARY(MAX)) AS ButtonImage, pk.ImageAlign, pk.InvNo, pk.AutoApply, pk.DiscountID, pk.MembershipID INTO #tempKeys FROM PosScreens ps, PosKeys pk WHERE pk.StationNo = 0 AND pk.DivNo = 0');
