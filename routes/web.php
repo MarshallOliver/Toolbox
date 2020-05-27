@@ -29,7 +29,7 @@ Route::get('/dpl', 'DPLController@index');
 Route::post('/dpl', 'DPLController@generate');
 
 Route::get('/button-updates', 'ButtonUpdateController@index');
-Route::post('/button-udpates', 'ButtonUpdateController@execute');
+Route::post('/button-updates', 'ButtonUpdateController@execute');
 
 Route::group(['prefix' => 'locations'], function () {
 
