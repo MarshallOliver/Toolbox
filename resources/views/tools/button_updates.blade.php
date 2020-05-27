@@ -40,7 +40,7 @@
 			<div class="form-group col">
 				<label for="database">Database</label>
 				<select name="database" id="database" class="form-control @error('database') is-invalid @enderror" disabled>
-					<option disabled selected>Select a Location</option>
+					<option disabled selected>Select a Database</option>
 				</select>
 			</div>
 
@@ -57,14 +57,14 @@
 
 	const databases = [];
 	@foreach ($locations as $location)
-		databases["{{ $location->id }}"] = @foreach ($location->databases as $database)"<option value=' {{ $database->id }}'>{{ $database->catalog }}</option>" + @endforeach"";
+		databases["{{ $location->id }}"] ="<option disabled selected>Select a Database</option>" + @foreach ($location->databases as $database)"<option value=' {{ $database->id }}'>{{ $database->catalog }}</option>" + @endforeach"";
 	@endforeach
 
 	document.addEventListener('input', function(event) {
 		if (event.target.id !== "location") return;
 		let location = document.getElementById("location").value;
 		let database = document.getElementById("database");
-		database.innerHTML += databases["" + location + ""];
+		database.innerHTML = databases["" + location + ""];
 		database.disabled = false;
 	}, false);
 
