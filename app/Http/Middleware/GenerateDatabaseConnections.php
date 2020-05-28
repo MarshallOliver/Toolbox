@@ -29,6 +29,11 @@ class GenerateDatabaseConnections
                 'charset' => 'utf8',
                 'prefix' => '',
                 'prefix_indexes' => TRUE,
+                'encrypt' => env('DB_ENCRYPT', 'yes'),
+                'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'true'),
+                'options' => [
+                    \PDO::DBLIB_ATTR_STRINGIFY_UNIQUEIDENTIFIER => true,
+                ],
             ]);
 
         }

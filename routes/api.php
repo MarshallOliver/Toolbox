@@ -17,3 +17,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('arrivals', 'CenterEdge\ArrivalController@index');
+Route::get('arrivals/{arrival}', 'CenterEdge\ArrivalController@show');
+
+Route::get('bookings', 'CenterEdge\BookingController@index');
+Route::get('bookings/{booking}', '\CenterEdge\BookingController@show');
