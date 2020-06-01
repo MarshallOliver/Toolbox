@@ -49,6 +49,15 @@
 		<button type="submit" class="btn btn-danger">Execute</button>
 
 	</form> 
+
+	@if (session()->has('success'))
+		<div class="row">
+			<div class="col">
+				{{ session('success') }}
+				
+			</div>
+		</div>
+	@endif
 </div>
 
 @endsection
