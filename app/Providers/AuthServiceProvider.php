@@ -27,7 +27,6 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerUpdateScreensPolicies();
         $this->registerLocationPolicies();
         $this->registerLocationDatabasePolicies();
-        $this->registerSignPolicies();
 
     }
 
@@ -79,30 +78,5 @@ class AuthServiceProvider extends ServiceProvider
             return $user->hasAccess(['destroy-databases']);
         });
     
-    }
-
-    public function registerSignPolicies()
-    {
-
-        Gate::define('list-signs', function (\App\User $user) {
-            return $user->hasAccess(['list-signs']);
-        })
-
-        Gate::define('create-signs', function (\App\User $user) {
-            return $user->hasAccess(['create-signs']);
-        });
-
-        Gate::define('view-signs', function (\App\User $user) {
-            return $user->hasAccess(['view-signs']);
-        });
-
-        Gate::define('edit-signs', function (\App\User $user) {
-            return $user->hasAccess(['edit-signs']);
-        });
-
-        Gate::define('destroy-signs', function (\App\User $user) {
-            return $user->hasAccess(['destroy-signs']);
-        });
-
     }
 }
