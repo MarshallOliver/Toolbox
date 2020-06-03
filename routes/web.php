@@ -87,7 +87,6 @@ Route::group(['prefix' => 'locations'], function () {
 		->middleware('can:destroy-databases')
 		->name('locations.databases.destroy');
 
-<<<<<<< HEAD
 });
 
 Route::group(['prefix' => 'signs'], function () {
@@ -116,6 +115,4 @@ Route::group(['prefix' => 'signs'], function () {
 		->middleware('can:delete-signs')
 		->name('signs.update');
 
-=======
->>>>>>> 265320a05eed5b6e7498355e80ab419581b2b41e
 });
