@@ -31,6 +31,10 @@ Route::post('/dpl', 'DPLController@generate');
 Route::get('/button-updates', 'ButtonUpdateController@index');
 Route::post('/button-updates', 'ButtonUpdateController@execute');
 
+Route::get('/signage', function () {
+	return view('signage.index');
+});
+
 Route::group(['prefix' => 'locations'], function () {
 
 	Route::get('/', 'LocationController@index')

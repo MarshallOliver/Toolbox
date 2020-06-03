@@ -15,8 +15,8 @@ class Area extends JsonResource
      */
     public function toArray($request)
     {
-
-        $fieldMap = \App\CenterEdge\Area::fieldMap;
+        $table = \App\CenterEdge\Area::fieldMap['table'];
+        $fieldMap = \App\CenterEdge\Area::fieldMap['fields'];
         $base64 = \App\CenterEdge\Area::base64;
 
         $result = [];
@@ -31,7 +31,7 @@ class Area extends JsonResource
 
             if (!array_key_exists($select, $fieldMap)) { continue; }
 
-            $this->addSelect($fieldMap[$select]);
+            $this->addSelect($table . '.' . $fieldMap[$select]);
             if (in_array($select, $base64) && $this->{$fieldMap[$select]}) {
                 $result[$select] = base64_encode($this->{$fieldMap[$select]});
             } else {
@@ -42,7 +42,7 @@ class Area extends JsonResource
 
         $result['arrivals'] = new ArrivalCollection($this->whenLoaded('arrivals'));
 
-        $result['booking_details'] = $this->whenPivotLoaded('GroupAreaBookings', function () {
+        $result['group_area_bookings'] = $this->whenPivotLoaded('GroupAreaBookings', function () {
             return [
                 'event_date' => $this->pivot->EventDate,
                 'start_date_time' => $this->pivot->StartDateTime,
