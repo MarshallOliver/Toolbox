@@ -27,7 +27,10 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerUpdateScreensPolicies();
         $this->registerLocationPolicies();
         $this->registerLocationDatabasePolicies();
+<<<<<<< HEAD
         $this->registerSignPolicies();
+=======
+>>>>>>> 265320a05eed5b6e7498355e80ab419581b2b41e
 
     }
 
@@ -80,6 +83,7 @@ class AuthServiceProvider extends ServiceProvider
         });
     
     }
+<<<<<<< HEAD
 
     public function registerSignPolicies()
     {
@@ -105,4 +109,6 @@ class AuthServiceProvider extends ServiceProvider
         });
 
     }
+=======
+>>>>>>> 265320a05eed5b6e7498355e80ab419581b2b41e
 }

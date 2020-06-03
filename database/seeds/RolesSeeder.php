@@ -24,11 +24,14 @@ class RolesSeeder extends Seeder
                 'create-databases' => true,
                 'edit-databases' => true,
                 'destroy-databases' => true,
+<<<<<<< HEAD
                 'list-signs' => true,
                 'create-signs' => true,
                 'view-signs' => true,
                 'edit-signs' => true,
                 'destroy-signs' => true,
+=======
+>>>>>>> 265320a05eed5b6e7498355e80ab419581b2b41e
 
         	]
         ]);
@@ -45,11 +48,14 @@ class RolesSeeder extends Seeder
                 'create-databases' => false,
                 'edit-databases' => false,
                 'destroy-databases' => false,
+<<<<<<< HEAD
                 'list-signs' => false,
                 'create-signs' => false,
                 'view-signs' => false,
                 'edit-signs' => false,
                 'destroy-signs' => false,
+=======
+>>>>>>> 265320a05eed5b6e7498355e80ab419581b2b41e
 
             ]
         ]);
