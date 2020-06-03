@@ -27,24 +27,24 @@ class SanitizeFilters
                 'lte' => '<=',
 
             ];
-
-            $root = 'App\Http\Controllers\CenterEdge\/';
+            
+            $root = 'App\Http\Controllers\CenterEdge';
 
             switch (Route::currentRouteAction()) {
 
-                case $root . 'AreaController@index':
-                case $root . 'AreaController@show':
-                case $root . 'ArrivalController@indexWithArea':
-                case $root . 'ArrivalController@showWithArrivals':
+                case $root . '\AreaController@index':
+                case $root . '\AreaController@show':
+                case $root . '\ArrivalController@indexWithAreas':
+                case $root . '\ArrivalController@showWithAreas':
 
                     $fieldMap = \App\CenterEdge\Area::fieldMap;
 
                     break;
 
-                case $root . 'ArrivalController@index':
-                case $root . 'ArrivalController@show':
-                case $root . 'AreaController@indexWithArrivals':
-                case $root . 'AreaController@showWithArrivals':
+                case $root . '\ArrivalController@index':
+                case $root . '\ArrivalController@show':
+                case $root . '\AreaController@indexWithArrivals':
+                case $root . '\AreaController@showWithArrivals':
 
                     $fieldMap = \App\CenterEdge\Arrival::fieldMap;
 
@@ -55,7 +55,7 @@ class SanitizeFilters
             foreach ($request->filter as $filter => $operators) {
 
                 foreach ($operators as $operator => $arg) {
-                    $filters[] = [$fieldMap[$filter], $operatorMap[strtolower($operator)], $arg];
+                    $filters[] = [$fieldMap['table'] . '.' . $fieldMap['fields'][$filter], $operatorMap[strtolower($operator)], $arg];
                 }
             }
 
