@@ -28,8 +28,10 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/dpl', 'DPLController@index');
 Route::post('/dpl', 'DPLController@generate');
 
-Route::get('/button-updates', 'ButtonUpdateController@index');
-Route::post('/button-updates', 'ButtonUpdateController@execute');
+Route::group(['middleware' => 'can:update-screens'], function () {
+	Route::get('/button-updates', 'ButtonUpdateController@index');
+	Route::post('/button-updates', 'ButtonUpdateController@execute');
+});
 
 Route::get('/signage', function () {
 	return view('signage.index');
