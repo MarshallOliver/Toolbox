@@ -88,3 +88,31 @@ Route::group(['prefix' => 'locations'], function () {
 		->name('locations.databases.destroy');
 
 });
+
+Route::group(['prefix' => 'signs'], function () {
+
+	Route::get('/', 'SignController@index')
+		->middleware('can:list-signs')
+		->name('signs.index');
+
+	Route::get('/create', 'SignController@create')
+		->middleware('can:create-signs')
+		->name('signs.create');
+
+	Route::post('/', 'SignController@store')
+		->middleware('can:create-signs')
+		->name('signs.store');
+
+	Route::post('/{sign}/edit', 'SignController@edit')
+		->middleware('can:edit-signs')
+		->name('signs.edit');
+
+	Route::put('/{sign}', 'SignController@update')
+		->middleware('can:edit-signs')
+		->name('signs.update');
+
+	Route::delete('/{sign}', 'SignController@delete')
+		->middleware('can:delete-signs')
+		->name('signs.update');
+
+});
