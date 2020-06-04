@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSignsTable extends Migration
+class CreateSignTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,9 @@ class CreateSignsTable extends Migration
      */
     public function up()
     {
-        Schema::create('signs', function (Blueprint $table) {
+        Schema::create('sign_types', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('database_id')->constrained('databases')->onDelete('cascade');
             $table->string('name');
-            $table->jsonb('options');
             $table->timestamps();
         });
     }
@@ -29,6 +27,6 @@ class CreateSignsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('signs');
+        Schema::dropIfExists('sign_types');
     }
 }

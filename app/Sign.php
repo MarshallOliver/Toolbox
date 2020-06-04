@@ -17,4 +17,12 @@ class Sign extends Model
     public function location() {
     	return $this->belongsTo('App\Location');
     }
+
+    public function signType() {
+    	return $this->belongsTo('App\SignType');
+    }
+
+    public function signArea() {
+    	return $this->hasOne('App\SignArea');
+    }
 }
