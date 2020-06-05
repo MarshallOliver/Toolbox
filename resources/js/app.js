@@ -25,6 +25,37 @@ files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+ Vue.component('app')
+
 const app = new Vue({
     el: '#app',
+ 	data: function () {
+ 		return {
+ 			modal: {
+				title: '',
+				body: '',
+				action: '',
+			}
+ 		}
+ 	},
+
+    methods: {
+  		showModal: function (name, action, title = null, body = null) {
+
+  			this.modal.action = action;
+
+  			this.modal.title = title ? title : 'Delete ' + name + '?';
+  			this.modal.body = body ? body : 'Are you sure you want to DELETE ' + name + '?';
+
+  			$('.modal').modal('show');
+
+  		},
+
+  		hideModal: function () {
+
+  			$('.modal').modal('hide');
+
+  		}
+
+  	}
 });

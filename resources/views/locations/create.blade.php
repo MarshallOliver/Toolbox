@@ -78,7 +78,7 @@
 			</div>
 			<div class="form-group col">
 				<label for="zip_code">Zip Code</label>
-				<input type="text" pattern="^(\d{5}(?:\-\d{4})?)$" name="zip_code" class="form-control @error('zip_code') is-invalid @enderror" id="zip_code" required>
+				<input type="text" pattern="^([0-9]{5}(?:-[0-9]{4})?)$" name="zip_code" class="form-control @error('zip_code') is-invalid @enderror" id="zip_code" required>
 				@error('zip_code')
 					<div class="invalid-feedback">
 						{{ $message }}
