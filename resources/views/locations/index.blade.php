@@ -21,7 +21,14 @@
 						<tr>
 							<td>{{ $location->long_name }}</td>
 							<td><a href="/locations/{{ $location->id }}/edit">Edit</a></td>
-							<td><a href="#" onclick="confirmDeleteLocation({{ $location->id }}, '{{ $location->long_name }}')">Delete</i></a></td>
+							<td><a href="#" v-on:click="
+								showModal(
+									'{{ $location->long_name }}', 
+									'/locations/{{ $location->id }}',
+									'Delete {{ $location->long_name }}?',
+									'Are you sure you want to <strong class=&#34;text-danger&#34;>DELETE</strong> the <u>{{ $location->long_name }}</u> location?',
+								)">Delete</a>
+							</td>
 						</tr>						
 					@endforeach
 				</tbody>
@@ -40,49 +47,6 @@
 
 </div>
 
-<div id="deleteLocation" class="modal">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title">Delete <span class="deleteLongName"></span>?</h5>
-				<button type="button" class="close" onclick="closeConfirmDeleteLocation()" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body">
-				<p>Are you sure you want to <span class="text-danger font-weight-bold">DELETE</span> the <u class="deleteLongName"></u> location?</p>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-primary" onclick="closeConfirmDeleteLocation()">Cancel</button>
-				<form id="deleteLocationForm" action="" method="POST">
-	
-					@csrf
-	
-					@method('delete') 
-
-					<button type="submit" class="btn btn-danger">Delete</button>
-
-				</form>
-			</div>
-		</div>
-	</div>
-</div>
+<delete-modal v-on:hide-modal="hideModal" v-bind:modal="modal"></delete-modal>
 
 @endsection
-
-<script>
-	
-	function confirmDeleteLocation(id, longName) {
-		$(".deleteLongName").html(longName);
-		document.getElementById("deleteLocationForm").action = '/locations/' + id;
-
-		$('#deleteLocation').modal('toggle');
-	}
-
-	function closeConfirmDeleteLocation() {
-
-		$('#deleteLocation').modal('toggle');
-
-	}
-
-</script>
