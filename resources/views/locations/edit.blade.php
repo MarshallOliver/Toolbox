@@ -132,7 +132,7 @@
 
 						<label for="zip_code">Zip Code</label>
 						<input type="text" 
-							pattern="^(\d{5}(?:\-\d{4})?)$" 
+							pattern="^([0-9]{5}(?:-[0-9]{4})?)$" 
 							name="zip_code" 
 							class="form-control @error('zip_code') is-invalid @enderror" 
 							id="zip_code" 
@@ -174,7 +174,14 @@
 						<tr>
 							<td>{{ $database->catalog }}</td>
 							<td><a href="/locations/{{ $location->id }}/databases/{{ $database->id }}/edit">Edit</a></td>
-							<td><a href="#" onclick="confirmDeleteDatabase({{ $database->id }}, '{{ $database->catalog }}')">Delete</a></td>
+							<td><a href="#" v-on:click="
+								showModal(
+									'{{ $database->catalog }}', 
+									'/locations/{{ $location->id }}/databases/{{ $database->id }}',
+									'Delete {{ $database->catalog }}?',
+									'Are you sure you want to <strong class=&#34;text-danger&#34;>DELETE</strong> the <u>{{ $database->catalog }}</u> database?',
+								)">Delete</a>
+							</td>
 						</tr>
 					@endforeach
 				</tbody>
@@ -189,50 +196,7 @@
 	</div>
 
 </div>
-	
+
+<delete-modal v-on:hide-modal="hideModal" v-bind:modal="modal"></delete-modal>
+
 @endsection
-
-<div id="deleteDatabase" class="modal">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title">Delete <span class="deleteCatalog"></span> Database?</h5>
-				<button type="button" class="close" onclick="closeConfirmDeleteDatabase()" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body">
-				<p>Are you sure you want to <span class="text-danger font-weight-bold">DELETE</span> the <u class="deleteCatalog"></u> database?</p>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-primary" onclick="closeConfirmDeleteDatabase()">Cancel</button>
-				<form id="deleteDatabaseForm" action="" method="POST">
-	
-					@csrf
-	
-					@method('delete') 
-
-					<button type="submit" class="btn btn-danger">Delete</button>
-
-				</form>
-			</div>
-		</div>
-	</div>
-</div>
-
-<script>
-	
-	function confirmDeleteDatabase(id, catalog) {
-		$(".deleteCatalog").html(catalog);
-		document.getElementById("deleteDatabaseForm").action = '/locations/{{ $location->id }}/databases/' + id;
-
-		$('#deleteDatabase').modal('toggle');
-	}
-
-	function closeConfirmDeleteDatabase() {
-
-		$('#deleteDatabase').modal('toggle');
-
-	}
-
-</script>
