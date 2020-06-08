@@ -18,7 +18,6 @@ class CreateSignsTable extends Migration
             $table->string('name');
             $table->foreignId('database_id')->constrained('databases')->onDelete('cascade');
             $table->foreignId('sign_type_id')->constrained('sign_types')->onDelete('cascade');
-            $table->jsonb('options');
             $table->timestamps();
         });
     }

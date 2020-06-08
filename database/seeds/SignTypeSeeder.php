@@ -13,7 +13,7 @@ class SignTypeSeeder extends Seeder
     public function run()
     {
         $RoomCards = SignType::create([
-        	'name' => 'Room Cards',
+        	'name' => 'Room Card',
         ]);
     }
 }
