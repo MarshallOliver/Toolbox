@@ -33,10 +33,6 @@ Route::group(['middleware' => 'can:update-screens'], function () {
 	Route::post('/button-updates', 'ButtonUpdateController@execute');
 });
 
-Route::get('/signage', function () {
-	return view('signage.index');
-});
-
 Route::group(['prefix' => 'locations'], function () {
 
 	Route::get('/', 'LocationController@index')
@@ -111,8 +107,8 @@ Route::group(['prefix' => 'signs'], function () {
 		->middleware('can:edit-signs')
 		->name('signs.update');
 
-	Route::delete('/{sign}', 'SignController@delete')
-		->middleware('can:delete-signs')
-		->name('signs.update');
+	Route::delete('/{sign}', 'SignController@destroy')
+		->middleware('can:destroy-signs')
+		->name('signs.destroy');
 
 });
