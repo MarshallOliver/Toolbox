@@ -50159,6 +50159,12 @@ var app = new Vue({
   el: '#app',
   data: function data() {
     return {
+      selectedLocation: 0,
+      selectedDatabase: 0,
+      selectedSignType: 0,
+      selectedArea: 0,
+      areas: null,
+      loading: false,
       modal: {
         title: '',
         body: '',
@@ -50177,6 +50183,28 @@ var app = new Vue({
     },
     hideModal: function hideModal() {
       $('.modal').modal('hide');
+    },
+    resetSelectedDatabase: function resetSelectedDatabase() {
+      this.selectedDatabase = 0;
+      this.selectedSignType = 0;
+      this.selectedArea = 0;
+      this.areas = null;
+    },
+    loadSignType: function loadSignType() {
+      var _this = this;
+
+      this.loading = true;
+
+      if (this.selectedSignType === 1) {
+        axios.get('/api/catalog/' + this.selectedDatabase + '/areas').then(function (response) {
+          _this.areas = response.data.data;
+          _this.loading = false;
+        })["catch"](function (error) {
+          console.log(error);
+        });
+      }
+
+      console.log(this.areas);
     }
   }
 });

@@ -37,7 +37,13 @@ class SignController extends Controller
      */
     public function create()
     {
-        //
+        $locations = \App\Location::with('databases')->get();
+        $signTypes = \App\SignType::all();
+
+        return view('signs.create', [
+            'locations' => $locations,
+            'signTypes' => $signTypes,
+        ]);
     }
 
     /**
@@ -48,7 +54,32 @@ class SignController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $validatedSign = $request->validate([
+            'name' => 'required',
+            'database' => 'required|numeric',
+            'sign_type' => 'required|numeric',
+
+        ]);
+
+        $sign = new Sign;
+
+        $sign->name = $validatedSign['name'];
+        $sign->database_id = $validatedSign['database'];
+        $sign->sign_type_id = $validatedSign['sign_type'];
+
+        $sign->save();
+
+        $validatedArea = $request->validate([
+            'area' => 'required',
+
+        ]);
+
+        $sign->signArea()->create([
+            'area_guid' => $validatedArea['area'],
+        ]);
+
+        return redirect('signs');
     }
 
     /**

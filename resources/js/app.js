@@ -31,6 +31,12 @@ const app = new Vue({
     el: '#app',
  	data: function () {
  		return {
+      selectedLocation: 0,
+      selectedDatabase: 0,
+      selectedSignType: 0,
+      selectedArea: 0,
+      areas: null,
+      loading: false,
  			modal: {
 				title: '',
 				body: '',
@@ -39,23 +45,46 @@ const app = new Vue({
  		}
  	},
 
-    methods: {
-  		showModal: function (name, action, title = null, body = null) {
+  methods: {
+		showModal: function (name, action, title = null, body = null) {
 
-  			this.modal.action = action;
+			this.modal.action = action;
 
-  			this.modal.title = title ? title : 'Delete ' + name + '?';
-  			this.modal.body = body ? body : 'Are you sure you want to DELETE ' + name + '?';
+			this.modal.title = title ? title : 'Delete ' + name + '?';
+			this.modal.body = body ? body : 'Are you sure you want to DELETE ' + name + '?';
 
-  			$('.modal').modal('show');
+			$('.modal').modal('show');
 
-  		},
+		},
 
-  		hideModal: function () {
+		hideModal: function () {
 
-  			$('.modal').modal('hide');
+			$('.modal').modal('hide');
 
-  		}
+		},
 
-  	}
+    resetSelectedDatabase: function () {
+      this.selectedDatabase = 0;
+      this.selectedSignType = 0;
+      this.selectedArea = 0;
+      this.areas = null;
+    },
+
+    loadSignType: function () {
+      this.loading = true;
+      if (this.selectedSignType === 1) {
+        axios.get('/api/catalog/' + this.selectedDatabase + '/areas')
+        .then((response) => {
+          this.areas = response.data.data;
+          this.loading = false;
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      }
+      console.log(this.areas);
+    }
+
+	},
+
 });
