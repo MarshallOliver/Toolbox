@@ -35,7 +35,8 @@
 									'/signs/{{ $sign->id }}',
 									'Delete {{ $sign->name }}?',
 									'Are you sure you want to <strong class=&#34;text-danger&#34;>DELETE</strong> the <u>{{ $sign->name }}</u> sign?',
-								)">Delete</a></td>
+								)">Delete</a>
+							</td>
 						</tr>						
 					@endforeach
 				</tbody>
