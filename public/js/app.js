@@ -2014,15 +2014,27 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     this.loadArrivals();
   },
+  props: {
+    roomCardArea: String,
+    database: Number
+  },
   methods: {
     loadArrivals: function loadArrivals() {
       var _this = this;
 
-      axios.get('/api/catalog/12/areas/46B15117-3080-44B8-BDEA-09574909B068/arrivals?limit[arrivals]=12').then(function (response) {
-        _this.arrivals = response.data.data.arrivals;
-      })["catch"](function (error) {
-        console.log(error);
-      });
+      var getArrivals = function getArrivals() {
+        var today = new Date();
+        var tomorrow = new Date();
+        tomorrow.setDate(today.getDate() + 1);
+        axios.get('/api/catalog/' + _this.database + '/areas/' + _this.roomCardArea + '/arrivals?limit[arrivals]=12&filter[start_date_time][gte]=' + today.toLocaleDateString() + '%2004:00:00&filter[end_date_time][lte]=' + tomorrow.toLocaleDateString() + '%2004:00:00').then(function (response) {
+          _this.arrivals = response.data.data.arrivals;
+        })["catch"](function (error) {
+          console.log(error);
+        });
+      };
+
+      getArrivals();
+      setInterval(getArrivals, 5000);
     }
   },
   filters: {
@@ -2065,6 +2077,10 @@ __webpack_require__.r(__webpack_exports__);
       area: ''
     };
   },
+  props: {
+    roomCardArea: String,
+    database: Number
+  },
   mounted: function mounted() {
     this.loadArea();
   },
@@ -2072,7 +2088,7 @@ __webpack_require__.r(__webpack_exports__);
     loadArea: function loadArea() {
       var _this = this;
 
-      axios.get('/api/catalog/12/areas/46B15117-3080-44B8-BDEA-09574909B068').then(function (response) {
+      axios.get('/api/catalog/' + this.database + '/areas/' + this.roomCardArea).then(function (response) {
         _this.area = response.data.data.description;
       })["catch"](function (error) {
         console.log(error);
@@ -37830,12 +37846,14 @@ var render = function() {
       return _c("div", { staticClass: "row no-gutters px-5" }, [
         _c("div", { staticClass: "col-2 pl-4 pb-4" }, [
           _vm._v(
-            _vm._s(_vm._f("time")(arrival.booking_details.start_date_time))
+            _vm._s(_vm._f("time")(arrival.group_area_bookings.start_date_time))
           )
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "col-2 pl-4 pb-4" }, [
-          _vm._v(_vm._s(_vm._f("time")(arrival.booking_details.end_date_time)))
+          _vm._v(
+            _vm._s(_vm._f("time")(arrival.group_area_bookings.end_date_time))
+          )
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "col-8 pl-4 pb-4" }, [

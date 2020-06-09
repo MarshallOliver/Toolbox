@@ -12,6 +12,10 @@
 				<thead>
 					<tr>
 						<th scope="col">Sign</th>
+						<th scope="col">Type</th>
+						<th scope="col">Location</th>
+						<th scope="col">Database</th>
+						<th scope="col">View</th>
 						<th scope="col">Edit</th>
 						<th scope="col">Delete</th>
 					</tr>
@@ -20,8 +24,18 @@
 					@foreach($signs as $sign)
 						<tr>
 							<td>{{ $sign->name }}</td>
+							<td>{{ $sign->signType->name }}</td>
+							<td>{{ $sign->database->location->long_name }}</td>
+							<td>{{ $sign->database->catalog }}</td>
+							<td><a href="/signs/{{ $sign->id }}">View</a></td>
 							<td><a href="/signs/{{ $sign->id }}/edit">Edit</a></td>
-							<td><a href="#" onclick="confirmDeleteSign({{ $sign->id }}, '{{ $sign->name }}')">Delete</i></a></td>
+							<td><a href="#" v-on:click="
+								showModal(
+									'{{ $sign->name }}', 
+									'/signs/{{ $sign->id }}',
+									'Delete {{ $sign->name }}?',
+									'Are you sure you want to <strong class=&#34;text-danger&#34;>DELETE</strong> the <u>{{ $sign->name }}</u> sign?',
+								)">Delete</a></td>
 						</tr>						
 					@endforeach
 				</tbody>
@@ -40,53 +54,6 @@
 
 </div>
 
-<div id="deleteSign" class="modal">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title">Delete <span class="deleteName"></span>?</h5>
-				<button type="button" class="close" onclick="closeConfirmDeleteSign()" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body">
-				<p>Are you sure you want to <span class="text-danger font-weight-bold">DELETE</span> the <u class="deleteName"></u> sign?</p>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-primary" onclick="closeConfirmDeleteSign()">Cancel</button>
-				<form id="deleteSignForm" action="" method="POST">
-	
-					@csrf
-	
-					@method('delete') 
-
-					<button type="submit" class="btn btn-danger">Delete</button>
-
-				</form>
-			</div>
-		</div>
-	</div>
-</div>
-
-@endsection
-
-@section('postscript')
-
-<script>
-	
-	function confirmDeleteSign(id, name) {
-		$(".deleteName").html(name);
-		document.getElementById("deleteSignForm").action = '/signs/' + id;
-
-		$('#deleteSign').modal('toggle');
-	}
-
-	function closeConfirmDeleteSign() {
-
-		$('#deleteSign').modal('toggle');
-
-	}
-
-</script>
+<delete-modal v-on:hide-modal="hideModal" v-bind:modal="modal"></delete-modal>
 
 @endsection

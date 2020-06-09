@@ -14,8 +14,8 @@ class Sign extends Model
     	'options' => 'array',
     ];
 
-    public function location() {
-    	return $this->belongsTo('App\Location');
+    public function database() {
+    	return $this->belongsTo('App\Database');
     }
 
     public function signType() {

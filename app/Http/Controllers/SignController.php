@@ -25,7 +25,7 @@ class SignController extends Controller
     public function index()
     {
 
-        $signs = Sign::all();
+        $signs = Sign::with('database.location')->get();
 
         return view('signs.index', ['signs' => $signs]);
     }
@@ -90,7 +90,11 @@ class SignController extends Controller
      */
     public function show(Sign $sign)
     {
-        //
+        if ($sign->sign_type_id == 1) {
+            return view('signs.roomcards.index', ['sign' => $sign]);
+        } else {
+            dd('Something went wrong...');
+        }
     }
 
     /**

@@ -15,13 +15,18 @@
 			}
 		},
 
+		props: {
+			roomCardArea: String,
+			database: Number,
+		},
+
 		mounted() {
 			this.loadArea();
 		},
 
 		methods: {
 			loadArea: function () {
-				axios.get('/api/catalog/12/areas/46B15117-3080-44B8-BDEA-09574909B068')
+				axios.get('/api/catalog/' + this.database + '/areas/' + this.roomCardArea)
 				.then((response) => {
 					this.area = response.data.data.description;
 				})

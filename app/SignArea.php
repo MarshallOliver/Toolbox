@@ -15,4 +15,15 @@ class SignArea extends Model
     public function sign() {
     	return $this->belongsTo('sign');
     }
+
+    public function name() {
+    	
+    	$name = DB::connection($this->sign->database_id)->table('Areas')->select('Description')->where('Area_GUID', $this->area_guid)->get();
+
+    	dd($name);
+
+    	return $name->Description;
+
+    }
+
 }
