@@ -25,7 +25,7 @@ class SignController extends Controller
     public function index()
     {
 
-        $signs = Sign::with('database.location')->get();
+        $signs = Sign::with('database.location')->orderBy('name', 'asc')->get();
 
         return view('signs.index', ['signs' => $signs]);
     }
@@ -57,6 +57,7 @@ class SignController extends Controller
 
         $validatedSign = $request->validate([
             'name' => 'required',
+            'location' => 'required',
             'database' => 'required|numeric',
             'sign_type' => 'required|numeric',
 
@@ -105,7 +106,15 @@ class SignController extends Controller
      */
     public function edit(Sign $sign)
     {
-        //
+
+        $locations = \App\Location::with('databases')->get();
+        $signTypes = \App\SignType::all();
+
+        return view('signs.edit', ['sign' => $sign,
+                                    'locations' => $locations,
+                                    'signTypes' => $signTypes,
+                                    
+                                ]);
     }
 
     /**
@@ -117,7 +126,29 @@ class SignController extends Controller
      */
     public function update(Request $request, Sign $sign)
     {
-        //
+
+        $validatedSign = $request->validate([
+            'name' => 'required',
+            'location' => 'required',
+            'database' => 'required|numeric',
+            'sign_type' => 'required|numeric',
+
+        ]);
+
+        $sign->name = $validatedSign['name'];
+        $sign->database_id = $validatedSign['database'];
+        $sign->sign_type_id = $validatedSign['sign_type'];
+
+        $validatedArea = $request->validate([
+            'area' => 'required',
+
+        ]);
+
+        $sign->signArea->area_guid = $validatedArea['area'];
+
+        $sign->push();
+
+        return redirect('signs');
     }
 
     /**
@@ -128,6 +159,8 @@ class SignController extends Controller
      */
     public function destroy(Sign $sign)
     {
-        //
+        $sign->delete();
+
+        return redirect('signs');
     }
 }

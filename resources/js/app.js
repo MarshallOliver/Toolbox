@@ -25,18 +25,13 @@ files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
- Vue.component('app')
+Vue.component('app')
 
 const app = new Vue({
     el: '#app',
  	data: function () {
  		return {
-      selectedLocation: 0,
-      selectedDatabase: 0,
-      selectedSignType: 0,
-      selectedArea: 0,
-      areas: null,
-      loading: false,
+      csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
  			modal: {
 				title: '',
 				body: '',
@@ -62,28 +57,6 @@ const app = new Vue({
 			$('.modal').modal('hide');
 
 		},
-
-    resetSelectedDatabase: function () {
-      this.selectedDatabase = 0;
-      this.selectedSignType = 0;
-      this.selectedArea = 0;
-      this.areas = null;
-    },
-
-    loadSignType: function () {
-      this.loading = true;
-      if (this.selectedSignType === 1) {
-        axios.get('/api/catalog/' + this.selectedDatabase + '/areas')
-        .then((response) => {
-          this.areas = response.data.data;
-          this.loading = false;
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-      }
-      console.log(this.areas);
-    }
 
 	},
 
