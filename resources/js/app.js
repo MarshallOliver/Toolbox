@@ -16,10 +16,8 @@ window.Vue = require('vue');
  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
  */
 
-// const files = require.context('./', true, /\.vue$/i)
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
-
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+const files = require.context('./', true, /\.vue$/i)
+files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -27,6 +25,39 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+Vue.component('app')
+
 const app = new Vue({
     el: '#app',
+ 	data: function () {
+ 		return {
+      csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+ 			modal: {
+				title: '',
+				body: '',
+				action: '',
+			}
+ 		}
+ 	},
+
+  methods: {
+		showModal: function (name, action, title = null, body = null) {
+
+			this.modal.action = action;
+
+			this.modal.title = title ? title : 'Delete ' + name + '?';
+			this.modal.body = body ? body : 'Are you sure you want to DELETE ' + name + '?';
+
+			$('.modal').modal('show');
+
+		},
+
+		hideModal: function () {
+
+			$('.modal').modal('hide');
+
+		},
+
+	},
+
 });

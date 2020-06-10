@@ -24,14 +24,6 @@ class ButtonUpdateController extends Controller
     public function execute(Request $request)
     {
 
-        // DB::connection($request->database)->beginTransaction();
-
-        // $result = DB::connection($request->database)->statement('SELECT ps.StationNo, ps.DivNo, ps.ScreenName, ps.ScreenEnable INTO #tempState FROM PosScreens ps');
-
-        // DB::rollBack();
-
-        // dd($result);
-
         $result = DB::connection($request->database)->transaction(function () use ($request) {
 
             DB::connection($request->database)->statement('SELECT ps.StationNo, ps.DivNo, ps.ScreenName, ps.ScreenEnable INTO ##tempState FROM PosScreens ps');
@@ -53,11 +45,12 @@ class ButtonUpdateController extends Controller
             
         });
 
-        $locations = \App\Location::with('databases')->get();
+        $database = \App\Database::findOrFail($request->database);
+        $success = 'You have successfully updated the ' . $database->catalog . ' database in the ' . $database->location->long_name . ' location.';
 
-        return view('tools.button_updates', ['locations' => $locations,
-                                             'result' => $result
-                                         ]);
+        session()->flash('success', $success);
+
+        return redirect('button-updates');
 
     }
 }

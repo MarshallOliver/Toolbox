@@ -28,8 +28,10 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/dpl', 'DPLController@index');
 Route::post('/dpl', 'DPLController@generate');
 
-Route::get('/button-updates', 'ButtonUpdateController@index');
-Route::post('/button-updates', 'ButtonUpdateController@execute');
+Route::group(['middleware' => 'can:update-screens'], function () {
+	Route::get('/button-updates', 'ButtonUpdateController@index');
+	Route::post('/button-updates', 'ButtonUpdateController@execute');
+});
 
 Route::group(['prefix' => 'locations'], function () {
 
@@ -80,5 +82,37 @@ Route::group(['prefix' => 'locations'], function () {
 	Route::delete('/{location}/databases/{database}', 'LocationDatabaseController@destroy')
 		->middleware('can:destroy-databases')
 		->name('locations.databases.destroy');
+
+});
+
+Route::group(['prefix' => 'signs'], function () {
+
+	Route::get('/', 'SignController@index')
+		->middleware('can:list-signs')
+		->name('signs.index');
+
+	Route::get('/create', 'SignController@create')
+		->middleware('can:create-signs')
+		->name('signs.create');
+
+	Route::post('/', 'SignController@store')
+		->middleware('can:create-signs')
+		->name('signs.store');
+
+	Route::get('/{sign}', 'SignController@show')
+		->middleware('can:view-signs')
+		->name('signs.show');
+
+	Route::get('/{sign}/edit', 'SignController@edit')
+		->middleware('can:edit-signs')
+		->name('signs.edit');
+
+	Route::put('/{sign}', 'SignController@update')
+		->middleware('can:edit-signs')
+		->name('signs.update');
+
+	Route::delete('/{sign}', 'SignController@destroy')
+		->middleware('can:destroy-signs')
+		->name('signs.destroy');
 
 });
