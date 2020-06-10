@@ -33,10 +33,6 @@ Route::group(['middleware' => 'can:update-screens'], function () {
 	Route::post('/button-updates', 'ButtonUpdateController@execute');
 });
 
-Route::get('/signage', function () {
-	return view('signage.index');
-});
-
 Route::group(['prefix' => 'locations'], function () {
 
 	Route::get('/', 'LocationController@index')
@@ -103,7 +99,11 @@ Route::group(['prefix' => 'signs'], function () {
 		->middleware('can:create-signs')
 		->name('signs.store');
 
-	Route::post('/{sign}/edit', 'SignController@edit')
+	Route::get('/{sign}', 'SignController@show')
+		->middleware('can:view-signs')
+		->name('signs.show');
+
+	Route::get('/{sign}/edit', 'SignController@edit')
 		->middleware('can:edit-signs')
 		->name('signs.edit');
 
@@ -111,8 +111,8 @@ Route::group(['prefix' => 'signs'], function () {
 		->middleware('can:edit-signs')
 		->name('signs.update');
 
-	Route::delete('/{sign}', 'SignController@delete')
-		->middleware('can:delete-signs')
-		->name('signs.update');
+	Route::delete('/{sign}', 'SignController@destroy')
+		->middleware('can:destroy-signs')
+		->name('signs.destroy');
 
 });

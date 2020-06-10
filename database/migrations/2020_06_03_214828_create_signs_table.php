@@ -15,9 +15,9 @@ class CreateSignsTable extends Migration
     {
         Schema::create('signs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('database_id')->constrained('databases')->onDelete('cascade');
             $table->string('name');
-            $table->jsonb('options');
+            $table->foreignId('database_id')->constrained('databases')->onDelete('cascade');
+            $table->foreignId('sign_type_id')->constrained('sign_types')->onDelete('cascade');
             $table->timestamps();
         });
     }

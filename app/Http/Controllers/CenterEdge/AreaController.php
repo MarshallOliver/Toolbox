@@ -14,7 +14,7 @@ class AreaController extends Controller
     public function index($database, Request $request)
     {
 
-        return new AreaCollection(Area::on($database)->take($request->limit['areas'] ?? 100)->get());
+        return new AreaCollection(Area::on($database)->take($request->limit['areas'] ?? 100)->orderBy('description', 'asc')->get());
     
     }
 

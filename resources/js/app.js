@@ -25,12 +25,13 @@ files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
- Vue.component('app')
+Vue.component('app')
 
 const app = new Vue({
     el: '#app',
  	data: function () {
  		return {
+      csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
  			modal: {
 				title: '',
 				body: '',
@@ -39,23 +40,24 @@ const app = new Vue({
  		}
  	},
 
-    methods: {
-  		showModal: function (name, action, title = null, body = null) {
+  methods: {
+		showModal: function (name, action, title = null, body = null) {
 
-  			this.modal.action = action;
+			this.modal.action = action;
 
-  			this.modal.title = title ? title : 'Delete ' + name + '?';
-  			this.modal.body = body ? body : 'Are you sure you want to DELETE ' + name + '?';
+			this.modal.title = title ? title : 'Delete ' + name + '?';
+			this.modal.body = body ? body : 'Are you sure you want to DELETE ' + name + '?';
 
-  			$('.modal').modal('show');
+			$('.modal').modal('show');
 
-  		},
+		},
 
-  		hideModal: function () {
+		hideModal: function () {
 
-  			$('.modal').modal('hide');
+			$('.modal').modal('hide');
 
-  		}
+		},
 
-  	}
+	},
+
 });
