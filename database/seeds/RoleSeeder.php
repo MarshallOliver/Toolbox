@@ -12,8 +12,8 @@ class RoleSeeder extends Seeder
      */
     public function run()
     {
-        $administrator = Role::create([
-        	'name' => 'Administrator',
+        $administrator = Role::updateOrCreate(
+        	['name' => 'Administrator'],
         	'permissions' => [
                 'update-screens' => true,
         		'list-locations' => true,
@@ -31,10 +31,10 @@ class RoleSeeder extends Seeder
                 'destroy-signs' => true,
 
         	]
-        ]);
+        );
 
-        $user = Role::create([
-        	'name' => 'User',
+        $user = Role::updateOrCreate([
+        	['name' => 'User'],
         	'permissions' => [
                 'update-screens' => false,
                 'list-locations' => false,
@@ -52,6 +52,6 @@ class RoleSeeder extends Seeder
                 'destroy-signs' => false,
 
             ]
-        ]);
+        );
     }
 }
