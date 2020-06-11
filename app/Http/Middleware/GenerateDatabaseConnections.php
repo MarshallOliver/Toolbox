@@ -16,6 +16,12 @@ class GenerateDatabaseConnections
     public function handle($request, Closure $next)
     {
 
+        $options = [];
+
+        if(env('DYNAMIC_DB_ENVIRONMENT', 'Windows') == 'Linux') {
+            $options = [\PDO::DBLIB_ATTR_STRINGIFY_UNIQUEIDENTIFIER => true];
+        }
+
         foreach(\App\Database::all() as $database) {
 
             \Config::set('database.connections.' . $database->id, [
@@ -31,6 +37,7 @@ class GenerateDatabaseConnections
                 'prefix_indexes' => TRUE,
                 'encrypt' => env('DB_ENCRYPT', 'yes'),
                 'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'true'),
+                'options' => $options,
             ]);
 
         }
