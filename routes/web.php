@@ -100,7 +100,6 @@ Route::group(['prefix' => 'signs'], function () {
 		->name('signs.store');
 
 	Route::get('/{sign}', 'SignController@show')
-		->middleware('can:view-signs')
 		->name('signs.show');
 
 	Route::get('/{sign}/edit', 'SignController@edit')
