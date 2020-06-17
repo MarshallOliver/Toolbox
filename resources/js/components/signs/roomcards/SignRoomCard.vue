@@ -154,7 +154,7 @@
 
 				let app = this;
 
-				axios.get('/api/catalog/' + this.roomCardDatabase + '/area/' + this.roomCardArea)
+				axios.get('/api/catalog/' + this.roomCardDatabase + '/areas/' + this.roomCardArea)
 				.then((response) => {
 					this.areaDesc = response.data.data.description;
 					this.areaDescLoaded = true;
