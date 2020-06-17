@@ -17,10 +17,17 @@
                     <p>Select a tool:</p>
 
                     <ul class="list-unstyled">
-                        <li><a href="/dpl">DPL Generator</a></li>
+                        
                         @can('update-screens')
                             <li><a href="/button-updates">Button Updates</a></li>
                         @endcan
+                        
+                        <li><a href="/dpl">DPL Generator</a></li>
+
+                        @can('list-signs')
+                            <li><a href="/signs">Signs</a></li>
+                        @endcan
+                   
                     </ul>
 
                 </div>

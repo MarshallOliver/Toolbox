@@ -31,7 +31,6 @@ const app = new Vue({
     el: '#app',
  	data: function () {
  		return {
-      csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
  			modal: {
 				title: '',
 				body: '',

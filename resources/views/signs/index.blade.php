@@ -55,6 +55,6 @@
 
 </div>
 
-<delete-modal v-on:hide-modal="hideModal" v-bind:modal="modal"></delete-modal>
+<utility-delete-modal v-on:hide-modal="hideModal" v-bind:modal="modal"></utility-delete-modal>
 
 @endsection

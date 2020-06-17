@@ -37,11 +37,13 @@ class SignController extends Controller
      */
     public function create()
     {
-        $locations = \App\Location::with('databases')->get();
+        $locations = \App\Location::all();
+        $databases = \App\Database::all();
         $signTypes = \App\SignType::all();
 
         return view('signs.create', [
             'locations' => $locations,
+            'databases' => $databases,
             'signTypes' => $signTypes,
         ]);
     }
@@ -107,11 +109,13 @@ class SignController extends Controller
     public function edit(Sign $sign)
     {
 
-        $locations = \App\Location::with('databases')->get();
+        $locations = \App\Location::all();
+        $databases = \App\Database::all();
         $signTypes = \App\SignType::all();
 
         return view('signs.edit', ['sign' => $sign,
                                     'locations' => $locations,
+                                    'databases' => $databases,
                                     'signTypes' => $signTypes,
                                     
                                 ]);

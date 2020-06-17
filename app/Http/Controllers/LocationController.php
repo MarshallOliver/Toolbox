@@ -57,7 +57,7 @@ class LocationController extends Controller
             'address2' => '',
             'city' => 'required',
             'state' => 'required|max:2',
-            'zip_code' => 'required|numeric',
+            'zip_code' => 'required',
 
         ]);
 
@@ -87,7 +87,6 @@ class LocationController extends Controller
     public function edit($id)
     {
 
-        // $location = Location::with('databases')->findOrFail($id);
         $location = Location::with('databases')->findOrFail($id);
 
         return view('locations.edit', ['location' => $location]);

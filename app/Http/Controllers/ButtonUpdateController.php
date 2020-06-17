@@ -16,9 +16,10 @@ class ButtonUpdateController extends Controller
     public function index()
     {
 
-        $locations = \App\Location::with('databases')->get();
+        $locations = \App\Location::all();
+        $databases = \App\Database::all();
 
-    	return view('tools.button_updates', ['locations' => $locations]);
+    	return view('tools.button_updates', ['locations' => $locations, 'databases' => $databases]);
     }
 
     public function execute(Request $request)
