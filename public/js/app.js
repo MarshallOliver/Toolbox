@@ -2352,6 +2352,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2359,8 +2368,9 @@ __webpack_require__.r(__webpack_exports__);
     return {
       areaDesc: '',
       areaArrivals: [],
-      areaArrivalsLoaded: false,
-      areaDscLoaded: false
+      nearestEvent: [],
+      isLoadingArrivals: true,
+      isLoadingArea: true
     };
   },
   props: {
@@ -2375,21 +2385,30 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     isLoading: function isLoading() {
-      return !this.areaDescLoaded && !this.areaArrivalsLoaded;
+      return this.isLoadingArea || this.isLoadingArrivals;
     },
     today: function today() {
-      return new Date();
+      return this.now().toLocaleDateString();
     },
     tomorrow: function tomorrow() {
-      return new Date(new Date().setDate(this.today.getDate() + 1));
+      return new Date(new Date().setDate(this.now().getDate() + 1)).toLocaleDateString();
     },
     areaDescFailed: function areaDescFailed() {
       return this.areaDesc == '';
+    },
+    currentDateTimeStamp: function currentDateTimeStamp() {
+      return this.now().toLocaleDateString() + '%20' + this.now().getHours() + ':' + this.now().getMinutes() + ':00';
+    },
+    hasCurrentEvent: function hasCurrentEvent() {
+      if (this.nearestEvent.group_area_bookings) {
+        var nearestEventStartDateTime = new Date(this.nearestEvent.group_area_bookings.start_date_time);
+        var nearestEventEndDateTime = new Date(this.nearestEvent.group_area_bookings.end_date_time);
+        return nearestEventStartDateTime <= this.now && nearestEventEndDateTime >= this.now;
+      }
     }
   },
   filters: {
     time: function time(value) {
-      if (!value) return '';
       var date = new Date(value);
       var hours = date.getHours();
       var minutes = date.getMinutes();
@@ -2427,26 +2446,41 @@ __webpack_require__.r(__webpack_exports__);
     loadAreaDesc: function loadAreaDesc() {
       var _this = this;
 
-      var app = this;
-      axios.get('/api/catalog/' + this.roomCardDatabase + '/area/' + this.roomCardArea).then(function (response) {
+      axios.get('/api/catalog/' + this.roomCardDatabase + '/areas/' + this.roomCardArea).then(function (response) {
         _this.areaDesc = response.data.data.description;
-        _this.areaDescLoaded = true;
+        _this.isLoadingArea = false;
       })["catch"](function (error) {
-        _this.areaDesc = '';
+        console.log('Error in loadAreaDesc: ' + _this.now());
         console.log(error);
-        _this.areaDescLoaded = true;
+        _this.isLoadingArea = false;
       });
     },
     loadAreaArrivals: function loadAreaArrivals() {
       var _this2 = this;
 
-      axios.get('/api/catalog/' + this.roomCardDatabase + '/areas/' + this.roomCardArea + '/arrivals?limit[arrivals]=12&filter[start_date_time][gte]=' + this.today.toLocaleDateString() + '%2004:00:00&filter[end_date_time][lte]=' + this.tomorrow.toLocaleDateString() + '%2004:00:00').then(function (response) {
+      axios.get('/api/catalog/' + this.roomCardDatabase + '/areas/' + this.roomCardArea + '/arrivals?limit[arrivals]=12&filter[start_date_time][gte]=' + this.today + '%2004:00:00&filter[end_date_time][lte]=' + this.tomorrow + '%2004:00:00').then(function (response) {
         _this2.areaArrivals = response.data.data.arrivals;
-        _this2.areaArrivalsLoaded = true;
+        _this2.isLoadingArrivals = false;
       })["catch"](function (error) {
+        console.log('Error in loadAreaArrivals: ' + _this2.now());
         console.log(error);
-        this.areaArrivalsLoaded = true;
+        _this2.isLoadingArrivals = false;
       });
+    },
+    loadNearestEvent: function loadNearestEvent() {
+      var _this3 = this;
+
+      axios.get('/api/catalog/' + this.roomCardDatabase + '/areas/' + this.roomCardArea + '/arrivals?limit[arrivals]=1&filter[end_date_time][gte]=' + this.currentDateTimeStamp).then(function (response) {
+        _this3.nearestEvent = response.data.data.arrivals[0];
+        _this3.isLoadingNearestEvent = false;
+      })["catch"](function (error) {
+        console.log('Error in loadNearestEvent: ' + _this3.now());
+        console.log(error);
+        _this3.isLoadingNearestEvent = false;
+      });
+    },
+    now: function now() {
+      return new Date();
     }
   },
   mounted: function mounted() {
@@ -2456,6 +2490,8 @@ __webpack_require__.r(__webpack_exports__);
     setInterval(this.loadAreaDesc, 300000);
     this.loadAreaArrivals();
     setInterval(this.loadAreaArrivals, 300000);
+    this.loadNearestEvent();
+    setInterval(this.loadNearestEvent, 300000);
   },
   components: {
     Loading: vue_loading_overlay__WEBPACK_IMPORTED_MODULE_0___default.a
@@ -39225,19 +39261,37 @@ var render = function() {
     _c("div", { staticClass: "row no-gutters flex-grow-1 event-table" }, [
       _c("div", { staticClass: "col" }, [
         _c("div", { staticClass: "d-flex flex-column h-100" }, [
-          _c("div", { staticClass: "row no-gutters caption px-5" }, [
-            _vm.areaDescFailed
-              ? _c("div", { staticClass: "col" }, [
-                  _c("p", [_vm._v("TODAY'S EVENTS")])
-                ])
-              : _c("div", { staticClass: "col" }, [
-                  _c("p", [
-                    _vm._v(_vm._s(_vm.areaDesc)),
-                    _c("span", [_vm._v(" | ")]),
-                    _vm._v("TODAY'S EVENTS")
-                  ])
-                ])
-          ]),
+          _vm.hasCurrentEvent
+            ? _c("div", { staticClass: "row no-gutters caption px-5" }, [
+                _vm.areaDescFailed
+                  ? _c("div", { staticClass: "col" }, [
+                      _c("p", { staticClass: "text-uppercase" }, [
+                        _vm._v("EVENT CURRENTLY IN PROGRESS")
+                      ])
+                    ])
+                  : _c("div", { staticClass: "col" }, [
+                      _c("p", { staticClass: "text-uppercase" }, [
+                        _vm._v(_vm._s(_vm.areaDesc)),
+                        _c("span", [_vm._v(" | ")]),
+                        _vm._v("EVENT CURRENTLY IN PROGRESS")
+                      ])
+                    ])
+              ])
+            : _c("div", { staticClass: "row no-gutters caption px-5" }, [
+                _vm.areaDescFailed
+                  ? _c("div", { staticClass: "col" }, [
+                      _c("p", { staticClass: "text-uppercase" }, [
+                        _vm._v("TODAY'S EVENTS")
+                      ])
+                    ])
+                  : _c("div", { staticClass: "col" }, [
+                      _c("p", { staticClass: "text-uppercase" }, [
+                        _vm._v(_vm._s(_vm.areaDesc)),
+                        _c("span", [_vm._v(" | ")]),
+                        _vm._v("TODAY'S EVENTS")
+                      ])
+                    ])
+              ]),
           _vm._v(" "),
           _vm._m(2),
           _vm._v(" "),

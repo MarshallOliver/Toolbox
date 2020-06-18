@@ -21,12 +21,21 @@
 			<div class="col">
 				<div class="d-flex flex-column h-100">
 					
-					<div class="row no-gutters caption px-5">
+					<div v-if="hasCurrentEvent" class="row no-gutters caption px-5">
 						<div v-if="areaDescFailed" class="col">
-							<p>TODAY'S EVENTS</p>
+							<p class="text-uppercase">EVENT CURRENTLY IN PROGRESS</p>
 						</div>
 						<div v-else class="col">
-							<p>{{ areaDesc }}<span> | </span>TODAY'S EVENTS</p>
+							<p class="text-uppercase">{{ areaDesc }}<span> | </span>EVENT CURRENTLY IN PROGRESS</p>
+						</div>
+					</div>
+
+					<div v-else class="row no-gutters caption px-5">
+						<div v-if="areaDescFailed" class="col">
+							<p class="text-uppercase">TODAY'S EVENTS</p>
+						</div>
+						<div v-else class="col">
+							<p class="text-uppercase">{{ areaDesc }}<span> | </span>TODAY'S EVENTS</p>
 						</div>
 					</div>
 					
@@ -64,8 +73,9 @@
 			return {
 				areaDesc: '',
 				areaArrivals: [],
-				areaArrivalsLoaded: false,
-				areaDscLoaded: false,
+				nearestEvent: [],
+				isLoadingArrivals: true,
+				isLoadingArea: true,	
 
 			}
 		},
@@ -87,29 +97,47 @@
 
 		computed: {
 			isLoading: function () {
-				return !this.areaDescLoaded && !this.areaArrivalsLoaded;
+				return (this.isLoadingArea || this.isLoadingArrivals);
 
 			},
 
 			today: function () {
-				return new Date();
+				return this.now().toLocaleDateString();
 			
 			},
 
 			tomorrow: function () {
-				return new Date((new Date()).setDate(this.today.getDate() + 1));
+				return new Date((new Date()).setDate(this.now().getDate() + 1)).toLocaleDateString();
 
 			},
 
 			areaDescFailed: function () {
 				return this.areaDesc == '';
-			}
+			
+			},
+
+			currentDateTimeStamp: function () {
+				return this.now().toLocaleDateString() + '%20' + this.now().getHours() + ':' + this.now().getMinutes() + ':00';
+
+			},
+
+			hasCurrentEvent: function () {
+
+				if (this.nearestEvent.group_area_bookings) {
+					
+					let nearestEventStartDateTime = new Date(this.nearestEvent.group_area_bookings.start_date_time);
+					let nearestEventEndDateTime = new Date(this.nearestEvent.group_area_bookings.end_date_time);
+
+					return (nearestEventStartDateTime <= this.now && nearestEventEndDateTime >= this.now);
+
+				}
+
+			},
 
 		},
 
 		filters: {
 			time: function (value) {
-				if (!value) return '';
 				let date = new Date(value);
 				let hours = date.getHours();
 				let minutes = date.getMinutes();
@@ -123,6 +151,7 @@
 
 				return hours + ':' + minutes + ' ' + ampm;
 			}
+
 		},
 
 		methods: {
@@ -151,33 +180,48 @@
 			},
 
 			loadAreaDesc: function () {
-
-				let app = this;
-
 				axios.get('/api/catalog/' + this.roomCardDatabase + '/areas/' + this.roomCardArea)
 				.then((response) => {
 					this.areaDesc = response.data.data.description;
-					this.areaDescLoaded = true;
+					this.isLoadingArea = false;
 				})
 				.catch((error) => {
-					this.areaDesc = '';
+					console.log('Error in loadAreaDesc: '+ this.now());
 					console.log(error);
-					this.areaDescLoaded = true;
+					this.isLoadingArea = false;
 				});
 
 			},
 
 			loadAreaArrivals: function () {
-				axios.get('/api/catalog/' + this.roomCardDatabase + '/areas/' + this.roomCardArea + '/arrivals?limit[arrivals]=12&filter[start_date_time][gte]=' + this.today.toLocaleDateString() +'%2004:00:00&filter[end_date_time][lte]=' + this.tomorrow.toLocaleDateString() + '%2004:00:00')
+				axios.get('/api/catalog/' + this.roomCardDatabase + '/areas/' + this.roomCardArea + '/arrivals?limit[arrivals]=12&filter[start_date_time][gte]=' + this.today +'%2004:00:00&filter[end_date_time][lte]=' + this.today + '%2009:32:00')
 				.then((response) => {
 					this.areaArrivals = response.data.data.arrivals;
-					this.areaArrivalsLoaded = true;
+					this.isLoadingArrivals = false;
 				})
-				.catch(function (error) {
+				.catch((error) => {
+					console.log('Error in loadAreaArrivals: '+ this.now());
 					console.log(error);
-					this.areaArrivalsLoaded = true;
+					this.isLoadingArrivals = false;
 				});
 
+			},
+
+			loadNearestEvent: function () {
+				axios.get('/api/catalog/' + this.roomCardDatabase + '/areas/' + this.roomCardArea + '/arrivals?limit[arrivals]=1&filter[end_date_time][gte]=' + this.currentDateTimeStamp)
+				.then((response) => {
+					this.nearestEvent = response.data.data.arrivals[0];
+					this.isLoadingNearestEvent = false;
+				})
+				.catch((error) => {
+					console.log('Error in loadNearestEvent: '+ this.now());
+					console.log(error);
+					this.isLoadingNearestEvent = false;
+				});
+			},
+
+			now: function () {
+				return new Date();
 			},
 
 		},
@@ -192,7 +236,10 @@
 
 			this.loadAreaArrivals();
 			setInterval(this.loadAreaArrivals, 300000);
-		
+
+			this.loadNearestEvent();
+			setInterval(this.loadNearestEvent, 300000);
+
 		},
 
 		components: {
