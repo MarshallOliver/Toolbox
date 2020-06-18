@@ -15,6 +15,7 @@ class Area extends JsonResource
      */
     public function toArray($request)
     {
+        
         $table = \App\CenterEdge\Area::fieldMap['table'];
         $fieldMap = \App\CenterEdge\Area::fieldMap['fields'];
         $base64 = \App\CenterEdge\Area::base64;
