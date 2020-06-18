@@ -30,4 +30,6 @@ Route::prefix('catalog/{database}')->group(function () {
 	Route::get('arrivals/{arrival}', 'CenterEdge\ArrivalController@show');
 	Route::get('arrivals/{arrival}/areas', 'CenterEdge\ArrivalController@showWithAreas');
 
+	Route::get('application', 'CenterEdge\ApplicationInfoController@index');
+
 });
