@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Str;
 
-class Area extends JsonResource
+class GroupAreaBooking extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,10 +15,10 @@ class Area extends JsonResource
      */
     public function toArray($request)
     {
-        
-        $table = \App\CenterEdge\Area::fieldMap['table'];
-        $fieldMap = \App\CenterEdge\Area::fieldMap['fields'];
-        $base64 = \App\CenterEdge\Area::base64;
+
+        $table = \App\CenterEdge\GroupAreaBooking::fieldMap['table'];
+        $fieldMap = \App\CenterEdge\GroupAreaBooking::fieldMap['fields'];
+        $base64 = \App\CenterEdge\GroupAreaBooking::base64;
 
         $result = [];
 
@@ -33,7 +33,7 @@ class Area extends JsonResource
             if (!array_key_exists($select, $fieldMap)) { continue; }
 
             $this->addSelect($table . '.' . $fieldMap[$select]);
-            if (in_array($select, $base64) && $this->{$fieldMap[$select]}) {
+            if (in_array($select, $base64)) {
                 $result[$select] = base64_encode($this->{$fieldMap[$select]});
             } else {
                 $result[$select] = $this->{$fieldMap[$select]};
@@ -41,9 +41,7 @@ class Area extends JsonResource
 
         }
 
-        $result['arrivals'] = new ArrivalCollection($this->whenLoaded('arrivals'));
-
-        $result['group_area_bookings'] = new GroupAreaBookingCollection($this->whenLoaded('bookings'));
+        $result['arrival'] = new Arrival($this->whenLoaded('arrival'));
 
         return $result;
     }

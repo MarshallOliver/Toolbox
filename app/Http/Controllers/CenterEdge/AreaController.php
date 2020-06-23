@@ -22,7 +22,9 @@ class AreaController extends Controller
     {
 
         return new AreaCollection(Area::on($database)->with(['arrivals' => function ($query) use ($request) {
-            $query->take($request->limit['arrivals'] ?? 100);
+            $query->with(['bookings' => function ($query) use ($request) {
+                $query->take($request->limit['bookings'] ?? 100);
+            }])->take($request->limit['arrivals'] ?? 100);
         }])->take($request->limit['areas'] ?? 100)->get());
     
     }
@@ -37,7 +39,9 @@ class AreaController extends Controller
     public function showWithArrivals($database, $area, Request $request)
     {
         return new AreaResource(Area::on($database)->with(['arrivals' => function ($query) use ($request) {
-            $query->where($request->filter)->take($request->limit['arrivals'] ?? 100);
+            $query->with(['bookings' => function ($query) use ($request) {
+                $query->take($request->limit['bookings'] ?? 100);
+            }])->where($request->filter)->take($request->limit['arrivals'] ?? 100);
         }])->find($area));
     }
 }

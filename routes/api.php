@@ -32,4 +32,6 @@ Route::prefix('catalog/{database}')->group(function () {
 
 	Route::get('application', 'CenterEdge\ApplicationInfoController@index');
 
+	Route::get('bookings', 'CenterEdge\GroupAreaBookingController@index');
+
 });
