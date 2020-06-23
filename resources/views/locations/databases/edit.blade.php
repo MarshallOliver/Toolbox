@@ -9,7 +9,7 @@
 		</div>
 	</div>
 	
-	@include('locations.databases.form', ['action' => '/locations/' . $location->id . '/databases/' . $database->id, 'method' => 'PUT'])
+	@include('locations.databases.form', ['action' => '/locations/' . $database->location_id . '/databases/' . $database->id, 'method' => 'PUT'])
 
 </div>
 

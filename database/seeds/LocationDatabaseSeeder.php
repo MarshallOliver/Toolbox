@@ -18,7 +18,7 @@ class LocationDatabaseSeeder extends Seeder
         	'port' => env('SEED_DB_PORT', '1433'),
         	'catalog' => env('SEED_DB_DATABASE', 'Test'),
         	'username' => env('SEED_DB_USERNAME', 'root'),
-        	'password' => encrypt(env('SEED_DB_PASSWORD', '')),
+        	'password' => env('SEED_DB_PASSWORD', ''),
 
         ]);
     }
