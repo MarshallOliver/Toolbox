@@ -18,48 +18,57 @@ class SanitizeFilters
     {
         if ($request->filter) {
 
-            $filters = [];
+            $sanitizedFilters = [];
             $operatorMap = [
-                'e' => 'e',
+                'e' => '=',
                 'gt' => '>',
                 'lt' => '<',
                 'gte' => '>=',
                 'lte' => '<=',
 
             ];
-            
-            $root = 'App\Http\Controllers\CenterEdge';
 
-            switch (Route::currentRouteAction()) {
+            foreach ($request->filter as $table => $filters) {
 
-                case $root . '\AreaController@index':
-                case $root . '\AreaController@show':
-                case $root . '\ArrivalController@indexWithAreas':
-                case $root . '\ArrivalController@showWithAreas':
+                switch (strtolower($table)) {
 
-                    $fieldMap = \App\CenterEdge\Area::fieldMap;
+                    case 'areas':
 
-                    break;
+                        $fieldMap = \App\CenterEdge\Area::fieldMap;
 
-                case $root . '\ArrivalController@index':
-                case $root . '\ArrivalController@show':
-                case $root . '\AreaController@indexWithArrivals':
-                case $root . '\AreaController@showWithArrivals':
+                        break;
 
-                    $fieldMap = \App\CenterEdge\Arrival::fieldMap;
+                    case 'arrivals':
+                    case 'grouparrivals':
+                    case 'group_arrivals':
 
-                    break;
+                        $fieldMap = \App\CenterEdge\Arrival::fieldMap;
 
-            }
+                        break;
 
-            foreach ($request->filter as $filter => $operators) {
+                    case 'bookings':
+                    case 'groupareabookings':
+                    case 'group_area_bookings':
 
-                foreach ($operators as $operator => $arg) {
-                    $filters[] = [$fieldMap['table'] . '.' . $fieldMap['fields'][$filter], $operatorMap[strtolower($operator)], $arg];
+                        $fieldMap = \App\CenterEdge\GroupAreaBooking::fieldMap;
+
+                        break;
+
                 }
+
+                foreach ($filters as $filter => $operators) {
+
+                    foreach($operators as $operator => $arg) {
+
+                        $sanitizedFilters[] = [$fieldMap['table'] . '.' . $fieldMap['fields'][$filter], $operatorMap[strtolower($operator)], $arg];
+
+                    }
+
+                }
+
             }
 
-            $request->filter = $filters;
+            $request->filter = $sanitizedFilters;
 
         }
         
