@@ -31,7 +31,7 @@ class GenerateDatabaseConnections
                 'port' => $database->port,
                 'database' => $database->catalog,
                 'username' => $database->username,
-                'password' => decrypt($database->password),
+                'password' => $database->password,
                 'charset' => 'utf8',
                 'prefix' => '',
                 'prefix_indexes' => TRUE,

@@ -9,7 +9,7 @@ class ApplicationInfo extends Model
     protected $table = 'ApplicationInfo';
     protected $primaryKey = null;
     public $incrementing = false;
-    public $timesteps = false;
+    public $timestamps = false;
 
     const fieldMap = [
         'table' => 'ApplicationInfo',
