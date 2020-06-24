@@ -31,6 +31,7 @@
 						@foreach ($location->databases as $database)
 						<tr>
 							<td>{{ $database->catalog }}</td>
+							<td><a href="/locations/{{ $location-id }}/databases/{{ $database->id }}/log">{{ __('Message Log') }}</a></td>
 							<td><a href="/locations/{{ $location->id }}/databases/{{ $database->id }}/edit">Edit</a></td>
 							<td><a href="#" v-on:click="
 								showModal(

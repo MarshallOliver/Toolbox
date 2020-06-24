@@ -78,6 +78,10 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('destroy-databases', function (\App\User $user) {
             return $user->hasAccess(['destroy-databases']);
         });
+
+        Gate::define('view-messagelog', function (\App\User $user) {
+            return $user->hasAccess(['view-messagelog']);
+        });
     
     }
 
