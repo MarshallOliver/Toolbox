@@ -115,4 +115,9 @@ class LocationDatabaseController extends Controller
 
         return redirect('/locations/' . $location->id . '/edit');
     }
+
+    public function showLog(\App\Location $location, \App\Database $database)
+    {
+        return view('locations.databases.messagelog', ['location' => $location, 'database' => $database]);
+    }
 }

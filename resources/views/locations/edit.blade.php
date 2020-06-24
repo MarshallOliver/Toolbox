@@ -23,6 +23,7 @@
 					<thead>
 						<tr>
 							<th scope="col">Database</th>
+							<th scope="col">Message Log</th>
 							<th scope="col">Edit</th>
 							<th scope="col">Delete</th>
 						</tr>
@@ -31,15 +32,15 @@
 						@foreach ($location->databases as $database)
 						<tr>
 							<td>{{ $database->catalog }}</td>
-							<td><a href="/locations/{{ $location-id }}/databases/{{ $database->id }}/log">{{ __('Message Log') }}</a></td>
-							<td><a href="/locations/{{ $location->id }}/databases/{{ $database->id }}/edit">Edit</a></td>
+							<td><a href="/locations/{{ $location->id }}/databases/{{ $database->id }}/log">{{ __('Message Log') }}</a></td>
+							<td><a href="/locations/{{ $location->id }}/databases/{{ $database->id }}/edit">{{ __('Edit') }}</a></td>
 							<td><a href="#" v-on:click="
 								showModal(
 									'{{ $database->catalog }}', 
 									'/locations/{{ $location->id }}/databases/{{ $database->id }}',
 									'Delete {{ $database->catalog }}?',
 									'Are you sure you want to <strong class=&#34;text-danger&#34;>DELETE</strong> the <u>{{ $database->catalog }}</u> database?',
-								)">Delete</a>
+								)">{{ __('Delete') }}</a>
 							</td>
 						</tr>
 						@endforeach
