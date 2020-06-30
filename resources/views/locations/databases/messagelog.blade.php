@@ -2,10 +2,6 @@
 
 @section('content')
 
-	<div class="container">
-
-		This is the Message Log.
-
-	</div>
+	<message-log :log-location="{{ $location }}" :log-database="{{ $database }}"></message-log>
 
 @endsection
