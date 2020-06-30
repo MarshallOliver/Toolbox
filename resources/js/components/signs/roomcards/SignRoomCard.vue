@@ -262,7 +262,7 @@
 			},
 
 			getClock: function () {
-				document.getElementById('time').innerHTML = moment().format('H:mm A');
+				document.getElementById('time').innerHTML = moment().format('h:mm A');
 				document.getElementById('date').innerHTML = moment().format('M/D/YYYY');
 
 			},
@@ -271,7 +271,7 @@
 		
 		filters: {
 			time: function (value) {
-				return moment(value).format('H:mm A');
+				return moment(value).format('h:mm A');
 			}
 
 		},
