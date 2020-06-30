@@ -10,7 +10,7 @@ class Arrival extends Model
     protected $primaryKey = 'RefID';
     public $incrementing = false;
     protected $keyType = 'string';
-    public $timesteps = false;
+    public $timestamps = false;
 
     protected $hidden = ['SecurityCode'];
 
@@ -70,6 +70,7 @@ class Arrival extends Model
 		    'contact_customer_id' => 'ContactCustomerID',
 		    'group_id' => 'GroupID',
 		    'web_store_version' => 'WebStoreVersion',
+		    
 		],
 
 	];
@@ -79,7 +80,11 @@ class Arrival extends Model
 
     ];
 
+    public function bookings() {
+    	return $this->hasMany('App\CenterEdge\GroupAreaBooking', 'RefID', 'RefID');
+    }
+
     public function areas() {
-    	return $this->belongsToMany('\App\CenterEdge\Area', 'GroupAreaBookings', 'RefID', 'AreaGUID')->withPivot('EventDate', 'StartDateTime', 'EndDateTime');
+    	return $this->hasManyThrough('App\CenterEdge\Area', 'App\CenterEdge\GroupAreaBooking', 'RefID', 'AreaGUID', 'RefID', 'AreaGUID');
     }
 }

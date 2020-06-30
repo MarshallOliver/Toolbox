@@ -258,7 +258,8 @@
         font-family: 'Futura PT';
         color: #FFF;
 
-        height: 1080px;
+        height: 100vh;
+        min-height: 768px;
         background-image: url('/images/bg_diamondplate.jpg');
         background-repeat: no-repeat;
         background-size: 1920px 1080px;
@@ -284,30 +285,39 @@
         line-height: 0.7;
     }
 
-    .event-table {
+    .event-table,
+    .current-event,
+    .no-events {
         font-size: 2.5rem;
     }
 
-    .event-table .caption {
+    .event-table .caption,
+    .current-event .caption,
+    .no-events .caption {
         background: #005897;
-        opacity: 80%;
+        opacity: 0.8;
 
     }
 
-    .event-table .caption p {
+    .event-table .caption p,
+    .current-event .caption p,
+    .no-events .caption p {
         font-family: 'Futura PT Book';
         font-size: 4rem;
         color: #FFF;
     }
 
-    .event-table .caption span {
+    .event-table .caption span,
+    .current-event .caption span
+    .no-events .caption span {
         color: #93C841;
     }
 
     .event-table .header,
-    .event-table .body {
+    .event-table .body,
+    .no-events .body {
         background: #FFF;
-        opacity: 58%;
+        opacity: 0.5;
         color: #000;
         line-height: 0.7;
 
@@ -329,6 +339,27 @@
 
     .event-table .body .col-2 {
         border-right: 1px solid;
+    }
+
+    .current-event,
+    .no-events {
+        color: #93C841;
+        font-size: 5rem;
+    }
+
+    .current-event .times {
+        font-family: 'Futura PT Book';
+    }
+
+    .current-event .footer,
+    .no-events .footer {
+        color: #fff;
+        font-size: 3rem;
+    }
+
+    .no-events .description-container {
+        width: 65%;
+        margin: 0 auto;
     }
 
     </style>

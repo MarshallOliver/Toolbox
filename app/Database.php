@@ -18,4 +18,14 @@ class Database extends Model
     public function location() {
     	return $this->belongsTo('App\Location');
     }
+
+    public function getPasswordAttribute($value)
+    {
+    	return decrypt($value);
+    }
+
+    public function setPasswordAttribute($value)
+    {
+    	$this->attributes['password'] = encrypt($value);
+    }
 }

@@ -3,9 +3,8 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Str;
 
-class Area extends JsonResource
+class MessageLog extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,10 +14,9 @@ class Area extends JsonResource
      */
     public function toArray($request)
     {
-        
-        $table = \App\CenterEdge\Area::fieldMap['table'];
-        $fieldMap = \App\CenterEdge\Area::fieldMap['fields'];
-        $base64 = \App\CenterEdge\Area::base64;
+        $table = \App\CenterEdge\MessageLog::fieldMap['table'];
+        $fieldMap = \App\CenterEdge\MessageLog::fieldMap['fields'];
+        $base64 = \App\CenterEdge\MessageLog::base64;
 
         $result = [];
 
@@ -40,10 +38,6 @@ class Area extends JsonResource
             }
 
         }
-
-        $result['arrivals'] = new ArrivalCollection($this->whenLoaded('arrivals'));
-
-        $result['group_area_bookings'] = new GroupAreaBookingCollection($this->whenLoaded('bookings'));
 
         return $result;
     }

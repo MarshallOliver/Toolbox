@@ -10,7 +10,7 @@ class Area extends Model
     protected $primaryKey = 'AreaGUID';
     public $incrementing = false;
     protected $keyType = 'string';
-    public $timesteps = false;
+    public $timestamps = false;
 
     const fieldMap = [
         'table' => 'Areas',

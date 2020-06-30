@@ -52,7 +52,7 @@ class LocationDatabaseController extends Controller
         $database->port = $validatedRequest['port'];
         $database->catalog = $validatedRequest['catalog'];
         $database->username = $validatedRequest['username'];
-        $database->password = encrypt($validatedRequest['password']);
+        $database->password = $validatedRequest['password'];
 
         $database->save();
 
@@ -68,9 +68,7 @@ class LocationDatabaseController extends Controller
      */
     public function edit(\App\Location $location, \App\Database $database)
     {
-        return view('locations.databases.edit', ['database' => $database,
-
-                                             ]);
+        return view('locations.databases.edit', ['database' => $database]);
     }
 
     /**
@@ -97,7 +95,7 @@ class LocationDatabaseController extends Controller
         $database->port = $validatedRequest['port'];
         $database->catalog = $validatedRequest['catalog'];
         $database->username = $validatedRequest['username'];
-        $database->password = encrypt($validatedRequest['password']);
+        $database->password = $validatedRequest['password'];
 
         $database->save();
 
@@ -116,5 +114,10 @@ class LocationDatabaseController extends Controller
         Database::destroy($database->id);
 
         return redirect('/locations/' . $location->id . '/edit');
+    }
+
+    public function showLog(\App\Location $location, \App\Database $database)
+    {
+        return view('locations.databases.messagelog', ['location' => $location, 'database' => $database]);
     }
 }
