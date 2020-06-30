@@ -286,31 +286,36 @@
     }
 
     .event-table,
-    .current-event {
+    .current-event,
+    .no-events {
         font-size: 2.5rem;
     }
 
     .event-table .caption,
-    .current-event .caption {
+    .current-event .caption,
+    .no-events .caption {
         background: #005897;
         opacity: 80%;
 
     }
 
     .event-table .caption p,
-    .current-event .caption p {
+    .current-event .caption p,
+    .no-events .caption p {
         font-family: 'Futura PT Book';
         font-size: 4rem;
         color: #FFF;
     }
 
     .event-table .caption span,
-    .current-event .caption span {
+    .current-event .caption span
+    .no-events .caption span {
         color: #93C841;
     }
 
     .event-table .header,
-    .event-table .body {
+    .event-table .body,
+    .no-events .body {
         background: #FFF;
         opacity: 58%;
         color: #000;
@@ -336,7 +341,8 @@
         border-right: 1px solid;
     }
 
-    .current-event {
+    .current-event,
+    .no-events {
         color: #93C841;
         font-size: 5rem;
     }
@@ -345,9 +351,15 @@
         font-family: 'Futura PT Book';
     }
 
-    .current-event .footer {
+    .current-event .footer,
+    .no-events .footer {
         color: #fff;
         font-size: 3rem;
+    }
+
+    .no-events .description-container {
+        width: 65%;
+        margin: 0 auto;
     }
 
     </style>

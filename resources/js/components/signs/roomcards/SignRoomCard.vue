@@ -24,8 +24,39 @@
 
 	</div>
 
-	<!-- If there is a current event, show the Current Event info -->
-	<div v-if="hasCurrentEvent" class="row no-gutters flex-grow-1 current-event">
+	<!-- If there are no events scheduled for today, show a No Events message -->
+	<div v-if="areaArrivals.length == 0" class="row no-gutters flex-grow-1 no-events">
+		
+		<div class="col">
+			<div class="d-flex flex-column h-100">
+	
+				<!-- Today's Events caption -->
+				<div class="row no-gutters caption px-5">
+					<div class="col">
+						<p class="text-uppercase">{{ areaDesc }}<span v-if="areaDec != ''"> | </span>TODAY'S EVENTS</p>
+					</div>
+				</div>
+
+				<div class="row no-gutters text-center pt-5 mt-5 description-container">
+					<div class="col description">
+						There are currently no events scheduled in this room.
+					</div>
+				</div>
+
+				<!-- No Events Footer -->
+				<div class="row flex-grow-1 align-items-end no-gutters text-center">
+					<div class="col footer">
+						Contact group sales to have your event here.
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+	</div>
+
+	<!-- Else if there is a current event, show the Current Event info -->
+	<div v-else-if="hasCurrentEvent" class="row no-gutters flex-grow-1 current-event">
 
 		<div class="col">
 			<div class="d-flex flex-column h-100">
@@ -33,7 +64,7 @@
 				<!-- Current Event Caption -->
 				<div class="row no-gutters caption px-5">
 					<div class="col">
-						<p class="Text-uppercase">{{ areaDesc }}<span v-if="areaDesc != ''"> | </span>EVENT CURRENTLY IN PROGRESS</p>
+						<p class="text-uppercase">{{ areaDesc }}<span v-if="areaDesc != ''"> | </span>EVENT CURRENTLY IN PROGRESS</p>
 					</div>
 				</div>
 
@@ -63,7 +94,7 @@
 
 	</div>
 
-	<!-- If no current event, show the Today's Events table -->
+	<!-- Otherwise, show the Today's Events table -->
 	<div v-else class="row no-gutters flex-grow-1 event-table">
 
 		<div class="col">
