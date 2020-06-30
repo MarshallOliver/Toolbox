@@ -295,7 +295,7 @@
     .current-event .caption,
     .no-events .caption {
         background: #005897;
-        opacity: 80%;
+        opacity: 0.8;
 
     }
 
@@ -317,7 +317,7 @@
     .event-table .body,
     .no-events .body {
         background: #FFF;
-        opacity: 58%;
+        opacity: 0.5;
         color: #000;
         line-height: 0.7;
 
