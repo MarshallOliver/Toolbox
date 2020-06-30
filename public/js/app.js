@@ -2428,6 +2428,37 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
  // Vue Loading Overlay for preloader spinner
 
  // Custom debug mixin: includes debugLevel(valueToDisplay, numericalLevel) function
@@ -61132,13 +61163,33 @@ var render = function() {
       1
     ),
     _vm._v(" "),
-    _vm.hasCurrentEvent
+    _vm.areaArrivals.length == 0
+      ? _c("div", { staticClass: "row no-gutters flex-grow-1 no-events" }, [
+          _c("div", { staticClass: "col" }, [
+            _c("div", { staticClass: "d-flex flex-column h-100" }, [
+              _c("div", { staticClass: "row no-gutters caption px-5" }, [
+                _c("div", { staticClass: "col" }, [
+                  _c("p", { staticClass: "text-uppercase" }, [
+                    _vm._v(_vm._s(_vm.areaDesc)),
+                    _vm.areaDec != "" ? _c("span", [_vm._v(" | ")]) : _vm._e(),
+                    _vm._v("TODAY'S EVENTS")
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _vm._m(2),
+              _vm._v(" "),
+              _vm._m(3)
+            ])
+          ])
+        ])
+      : _vm.hasCurrentEvent
       ? _c("div", { staticClass: "row no-gutters flex-grow-1 current-event" }, [
           _c("div", { staticClass: "col" }, [
             _c("div", { staticClass: "d-flex flex-column h-100" }, [
               _c("div", { staticClass: "row no-gutters caption px-5" }, [
                 _c("div", { staticClass: "col" }, [
-                  _c("p", { staticClass: "Text-uppercase" }, [
+                  _c("p", { staticClass: "text-uppercase" }, [
                     _vm._v(_vm._s(_vm.areaDesc)),
                     _vm.areaDesc != "" ? _c("span", [_vm._v(" | ")]) : _vm._e(),
                     _vm._v("EVENT CURRENTLY IN PROGRESS")
@@ -61176,7 +61227,7 @@ var render = function() {
                 ])
               ]),
               _vm._v(" "),
-              _vm._m(2)
+              _vm._m(4)
             ])
           ])
         ])
@@ -61193,7 +61244,7 @@ var render = function() {
                 ])
               ]),
               _vm._v(" "),
-              _vm._m(3),
+              _vm._m(5),
               _vm._v(" "),
               _c(
                 "div",
@@ -61242,6 +61293,41 @@ var staticRenderFns = [
         _c("div", { staticClass: "col date", attrs: { id: "date" } })
       ])
     ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass:
+          "row no-gutters text-center pt-5 mt-5 description-container"
+      },
+      [
+        _c("div", { staticClass: "col description" }, [
+          _vm._v(
+            "\r\n\t\t\t\t\t\tThere are currently no events scheduled in this room.\r\n\t\t\t\t\t"
+          )
+        ])
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "row flex-grow-1 align-items-end no-gutters text-center" },
+      [
+        _c("div", { staticClass: "col footer" }, [
+          _vm._v(
+            "\r\n\t\t\t\t\t\tContact group sales to have your event here.\r\n\t\t\t\t\t"
+          )
+        ])
+      ]
+    )
   },
   function() {
     var _vm = this
