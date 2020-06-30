@@ -83,7 +83,6 @@ Route::group(['prefix' => 'locations'], function () {
 		->middleware('can:destroy-databases')
 		->name('locations.databases.destroy');
 
-
 	Route::get('/{location}/databases/{database}/log', 'LocationDatabaseController@showLog')
 		->middleware('can:view-messagelog')
 		->name('locations.databases.log');

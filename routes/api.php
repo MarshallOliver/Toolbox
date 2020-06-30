@@ -34,4 +34,6 @@ Route::prefix('catalog/{database}')->group(function () {
 
 	Route::get('bookings', 'CenterEdge\GroupAreaBookingController@index');
 
+	Route::get('messagelog', 'CenterEdge\MessageLogController@index');
+
 });

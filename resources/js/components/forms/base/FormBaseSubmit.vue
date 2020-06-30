@@ -25,6 +25,12 @@
 
 			},
 
+			onClick: {
+				type: String,
+				default: null,
+
+			},
+
 			cancelAction: {
 				type: String,
 				default: '',

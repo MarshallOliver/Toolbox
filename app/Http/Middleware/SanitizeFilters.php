@@ -25,6 +25,7 @@ class SanitizeFilters
                 'lt' => '<',
                 'gte' => '>=',
                 'lte' => '<=',
+                'ne' => '<>',
 
             ];
 
@@ -54,13 +55,36 @@ class SanitizeFilters
 
                         break;
 
+                    case 'messagelog':
+                    case 'message_log':
+
+                        $fieldMap = \App\CenterEdge\MessageLog::fieldMap;
+
+                        break;
+
                 }
 
                 foreach ($filters as $filter => $operators) {
 
-                    foreach($operators as $operator => $arg) {
+                    foreach ($operators as $operator => $arg) {
 
-                        $sanitizedFilters[] = [$fieldMap['table'] . '.' . $fieldMap['fields'][$filter], $operatorMap[strtolower($operator)], $arg];
+                        if ($operator == 'like') {
+                            $strings = preg_replace('/[\"\']/', '', preg_split('/\s(?=(?:[\"\'][^\"\']*[\"\']|[^\"\'])*$)/', $arg));
+
+                            foreach ($strings as $string) {
+                                if (strlen($string) > 0 && $string[0] == '-') {
+                                    $notString = preg_replace('/\-/', '', $string);
+                                    $sanitizedFilters[] = [$fieldMap['table'] . '.' . $fieldMap['fields'][$filter], 'not like', '%' . $notString . '%'];
+                                } else {
+                                    $sanitizedFilters[] = [$fieldMap['table'] . '.' . $fieldMap['fields'][$filter], 'like', '%' . $string . '%'];
+                                }
+
+                            }
+
+                        } else {
+                            $sanitizedFilters[] = [$fieldMap['table'] . '.' . $fieldMap['fields'][$filter], $operatorMap[strtolower($operator)], $arg];
+
+                        }
 
                     }
 
