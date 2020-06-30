@@ -1,6 +1,6 @@
 <template>
 
-	<form :action="formAction" method="POST">
+	<form :action="formAction" @submit="submitMethod($event)" method="POST">
 
 		<input v-if="requestsPutMethod" type="hidden" name="_method" value="PUT" />
 
@@ -49,6 +49,12 @@
 
 			},
 
+			onSubmit: {
+				type: String,
+				default: null,
+
+			},
+
 			formErrors: {
 				type: [Object, Array],
 				default: function () {
@@ -57,6 +63,16 @@
 					}
 
 				},
+
+			},
+
+		},
+
+		methods: {
+			submitMethod(event) {
+				if (this.onSubmit == 'prevent') {
+					event.preventDefault();
+				}
 
 			},
 

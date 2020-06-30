@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\CenterEdge;
 
 use App\CenterEdge\ApplicationInfo;
-use App\Http\Resources\AreaCollection;
 use App\Http\Resources\ApplicationInfo as ApplicationInfoResource;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
