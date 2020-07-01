@@ -35,7 +35,8 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "app/"
+            "App\\": "app/",
+            "MarshallOliver\\LaravelCenterEdgeAPI\\": "workbench/laravel-centeredge-api/src"
         },
         "classmap": [
             "database/seeds",

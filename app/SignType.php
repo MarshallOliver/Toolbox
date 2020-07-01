@@ -8,7 +8,7 @@ class SignType extends Model
 {
 
     public function signs() {
-    	$this->hasMany('\App\Sign');
+    	$this->hasMany('App\Sign');
     }
 
 }

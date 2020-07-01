@@ -87,6 +87,7 @@
 					.then((response) => {
 						this.areaOptions.options = response.data.data;
 						this.loadingArea = false;
+						console.log(this.areaOptions);
 					})
 					.catch(function (error) {
 						console.log(error);
