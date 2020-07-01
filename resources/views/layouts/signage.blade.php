@@ -308,7 +308,7 @@
     }
 
     .event-table .caption span,
-    .current-event .caption span
+    .current-event .caption span,
     .no-events .caption span {
         color: #93C841;
     }

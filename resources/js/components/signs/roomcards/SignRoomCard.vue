@@ -33,7 +33,7 @@
 				<!-- Today's Events caption -->
 				<div class="row no-gutters caption px-5">
 					<div class="col">
-						<p class="text-uppercase">{{ areaDesc }}<span v-if="areaDec != ''"> | </span>TODAY'S EVENTS</p>
+						<p class="text-uppercase">{{ areaDesc }}<span v-if="areaDesc != ''"> | </span>TODAY'S EVENTS</p>
 					</div>
 				</div>
 
@@ -236,7 +236,7 @@
 				return axios.get(uri + '?' + filters + '&' + limit)
 				.then((response) => {
 					this.areaArrivals = response.data.data;
-					this.debugLevel(['areaArrivals successfully loaded: ' + moment().format('YYYY-MM-DD HH:mm:ss'), this.areaArrivals]);
+					this.debugLevel(['areaArrivals successfully loaded: ' + moment().format('YYYY-MM-DD HH:mm:ss'), this.areaArrivals, uri + '?' + filters + '&' + limit]);
 				})
 				.catch((error) => {
 					this.debugLevel(['Error in getAreaArrivals: ' + moment().format('YYYY-MM-DD HH:mm:ss'), uri + '?' + filters + '&' + limit, error]);

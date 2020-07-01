@@ -2829,7 +2829,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       return axios.get(uri + '?' + filters + '&' + limit).then(function (response) {
         _this3.areaArrivals = response.data.data;
 
-        _this3.debugLevel(['areaArrivals successfully loaded: ' + moment__WEBPACK_IMPORTED_MODULE_3___default()().format('YYYY-MM-DD HH:mm:ss'), _this3.areaArrivals]);
+        _this3.debugLevel(['areaArrivals successfully loaded: ' + moment__WEBPACK_IMPORTED_MODULE_3___default()().format('YYYY-MM-DD HH:mm:ss'), _this3.areaArrivals, uri + '?' + filters + '&' + limit]);
       })["catch"](function (error) {
         _this3.debugLevel(['Error in getAreaArrivals: ' + moment__WEBPACK_IMPORTED_MODULE_3___default()().format('YYYY-MM-DD HH:mm:ss'), uri + '?' + filters + '&' + limit, error]);
       });
@@ -2849,13 +2849,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       });
     },
     getClock: function getClock() {
-      document.getElementById('time').innerHTML = moment__WEBPACK_IMPORTED_MODULE_3___default()().format('H:mm A');
+      document.getElementById('time').innerHTML = moment__WEBPACK_IMPORTED_MODULE_3___default()().format('h:mm A');
       document.getElementById('date').innerHTML = moment__WEBPACK_IMPORTED_MODULE_3___default()().format('M/D/YYYY');
     }
   },
   filters: {
     time: function time(value) {
-      return moment__WEBPACK_IMPORTED_MODULE_3___default()(value).format('H:mm A');
+      return moment__WEBPACK_IMPORTED_MODULE_3___default()(value).format('h:mm A');
     }
   },
   mounted: function () {
@@ -61843,7 +61843,7 @@ var render = function() {
         : _c(
             "div",
             {
-              staticClass: "btn-group",
+              staticClass: "d-flex justify-content-between btn-group",
               attrs: {
                 role: "group",
                 "aria-label": "Message log navigation links"
@@ -62249,7 +62249,7 @@ var render = function() {
                 _c("div", { staticClass: "col" }, [
                   _c("p", { staticClass: "text-uppercase" }, [
                     _vm._v(_vm._s(_vm.areaDesc)),
-                    _vm.areaDec != "" ? _c("span", [_vm._v(" | ")]) : _vm._e(),
+                    _vm.areaDesc != "" ? _c("span", [_vm._v(" | ")]) : _vm._e(),
                     _vm._v("TODAY'S EVENTS")
                   ])
                 ])
