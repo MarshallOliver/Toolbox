@@ -33,7 +33,7 @@
 				<!-- Today's Events caption -->
 				<div class="row no-gutters caption px-5">
 					<div class="col">
-						<p class="text-uppercase">{{ areaDesc }}<span v-if="areaDec != ''"> | </span>TODAY'S EVENTS</p>
+						<p class="text-uppercase">{{ areaDesc }}<span v-if="areaDesc != ''"> | </span>TODAY'S EVENTS</p>
 					</div>
 				</div>
 
@@ -71,14 +71,14 @@
 				<!-- Curent Event Description -->
 				<div class="row no-gutters text-center pt-5 mt-5">
 					<div class="col description">
-						{{ nearestEvent[0].arrival.description }}
+						{{ nearestEvent[0].description }}
 					</div>
 				</div>
 
 				<!-- Current Event Start and End Times -->
 				<div class="row no-gutters text-center">
 					<div class="col times">
-						{{ nearestEvent[0].start_date_time | time }} - {{ nearestEvent[0].end_date_time | time }}
+						{{ nearestEvent[0].booking_start_date_time | time }} - {{ nearestEvent[0].booking_end_date_time | time }}
 					</div>
 				</div>
 
@@ -121,9 +121,9 @@
 
 					<!-- For each arrival in areaArrivals -->
 					<div class="row no-gutters px-5" v-for="arrival in areaArrivals">
-						<div class="col-2 pl-4 pb-4">{{ arrival.start_date_time | time }}</div>
-						<div class="col-2 pl-4 pb-4">{{ arrival.end_date_time | time }}</div>
-						<div class="col-8 pl-4 pb-4">{{ arrival.arrival.description }}</div>
+						<div class="col-2 pl-4 pb-4">{{ arrival.booking_start_date_time | time }}</div>
+						<div class="col-2 pl-4 pb-4">{{ arrival.booking_end_date_time | time }}</div>
+						<div class="col-8 pl-4 pb-4">{{ arrival.description }}</div>
 					</div>
 
 				</div>
@@ -165,7 +165,7 @@
 
 		computed: {
 			hasCurrentEvent: function () {
-				return this.nearestEvent.length == 0 ? false : moment().isBetween(moment(this.nearestEvent[0].start_date_time).subtract(15, 'minutes'), this.nearestEvent[0].end_date_time);
+				return this.nearestEvent.length == 0 ? false : moment().isBetween(moment(this.nearestEvent[0].booking_start_date_time).subtract(15, 'minutes'), this.nearestEvent[0].booking_end_date_time);
 
 			},
 
@@ -229,14 +229,14 @@
 
 			getAreaArrivals: function () {
 
-				let uri = '/api/catalog/' + this.roomCardDatabase + '/bookings';
-				let filters = 'filter[bookings][area_guid][e]=' + this.roomCardArea +'&filter[bookings][start_date_time][gte]=' + this.shiftDateStart.format('YYYY-MM-DD HH:mm:ss') + '&filter[bookings][end_date_time][lte]=' + this.shiftDateEnd.format('YYYY-MM-DD HH:mm:ss');
-				let limit = 'limit[bookings]=12';
+				let uri = '/api/catalog/' + this.roomCardDatabase + '/areas/' + this.roomCardArea + '/arrivals';
+				let filters = 'filter[bookings][start_date_time][gte]=' + this.shiftDateStart.format('YYYY-MM-DD HH:mm:ss') + '&filter[bookings][end_date_time][lte]=' + this.shiftDateEnd.format('YYYY-MM-DD HH:mm:ss');
+				let limit = 'limit[arrivals]=12';
 
 				return axios.get(uri + '?' + filters + '&' + limit)
 				.then((response) => {
-					this.areaArrivals = response.data.data;
-					this.debugLevel(['areaArrivals successfully loaded: ' + moment().format('YYYY-MM-DD HH:mm:ss'), this.areaArrivals]);
+					this.areaArrivals = response.data.data.arrivals;
+					this.debugLevel(['areaArrivals successfully loaded: ' + moment().format('YYYY-MM-DD HH:mm:ss'), this.areaArrivals, uri + '?' + filters + '&' + limit]);
 				})
 				.catch((error) => {
 					this.debugLevel(['Error in getAreaArrivals: ' + moment().format('YYYY-MM-DD HH:mm:ss'), uri + '?' + filters + '&' + limit, error]);
@@ -246,14 +246,14 @@
 
 			getNearestEvent: function () {
 
-				let uri = '/api/catalog/' + this.roomCardDatabase + '/bookings';
-				let filters = 'filter[bookings][area_guid][e]=' + this.roomCardArea + '&filter[bookings][end_date_time][gte]=' + moment().format('YYYY-MM-DD HH:mm:ss');
-				let limit = 'limit[bookings]=1';
+				let uri = '/api/catalog/' + this.roomCardDatabase + '/areas/' + this.roomCardArea + '/arrivals';
+				let filters = 'filter[bookings][end_date_time][gte]=' + moment().format('YYYY-MM-DD HH:mm:ss');
+				let limit = 'limit[arrivals]=1';
 
 				return axios.get(uri + '?' + filters + '&' + limit)
 				.then((response) => {
-					this.nearestEvent = response.data.data;
-					this.debugLevel(['nearestEvent successfully loaded: ' + moment().format('YYYY-MM-DD HH:mm:ss'), this.nearestEvent]);
+					this.nearestEvent = response.data.data.arrivals;
+					this.debugLevel(['nearestEvent successfully loaded: ' + moment().format('YYYY-MM-DD HH:mm:ss'), uri + '?' + filters + '&' + limit, this.nearestEvent]);
 				})
 				.catch((error) => {
 					this.debugLevel(['Error in getNearestEvent: ' + moment().format('YYYY-MM-DD HH:mm:ss'), uri + '?' + filters + '&' + limit, error]);
