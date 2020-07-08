@@ -175,12 +175,6 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
-        /*
-         * Workbench packages in development...
-         */
-
-        MarshallOliver\LaravelCenterEdgeAPI\LaravelCenterEdgeAPIProvider::class,
-
     ],
 
     /*
