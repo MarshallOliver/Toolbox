@@ -1993,6 +1993,7 @@ __webpack_require__.r(__webpack_exports__);
         axios.get('/api/catalog/' + this.selectedDatabase + '/areas').then(function (response) {
           _this.areaOptions.options = response.data.data;
           _this.loadingArea = false;
+          console.log(_this.areaOptions);
         })["catch"](function (error) {
           console.log(error);
         });
@@ -2774,7 +2775,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   computed: {
     hasCurrentEvent: function hasCurrentEvent() {
-      return this.nearestEvent.length == 0 ? false : moment__WEBPACK_IMPORTED_MODULE_3___default()().isBetween(moment__WEBPACK_IMPORTED_MODULE_3___default()(this.nearestEvent[0].start_date_time).subtract(15, 'minutes'), this.nearestEvent[0].end_date_time);
+      return this.nearestEvent.length == 0 ? false : moment__WEBPACK_IMPORTED_MODULE_3___default()().isBetween(moment__WEBPACK_IMPORTED_MODULE_3___default()(this.nearestEvent[0].booking_start_date_time).subtract(15, 'minutes'), this.nearestEvent[0].booking_end_date_time);
     },
     shiftDateStart: function shiftDateStart() {
       return moment__WEBPACK_IMPORTED_MODULE_3___default()().set({
@@ -2823,13 +2824,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     getAreaArrivals: function getAreaArrivals() {
       var _this3 = this;
 
-      var uri = '/api/catalog/' + this.roomCardDatabase + '/bookings';
-      var filters = 'filter[bookings][area_guid][e]=' + this.roomCardArea + '&filter[bookings][start_date_time][gte]=' + this.shiftDateStart.format('YYYY-MM-DD HH:mm:ss') + '&filter[bookings][end_date_time][lte]=' + this.shiftDateEnd.format('YYYY-MM-DD HH:mm:ss');
-      var limit = 'limit[bookings]=12';
+      var uri = '/api/catalog/' + this.roomCardDatabase + '/areas/' + this.roomCardArea + '/arrivals';
+      var filters = 'filter[bookings][start_date_time][gte]=' + this.shiftDateStart.format('YYYY-MM-DD HH:mm:ss') + '&filter[bookings][end_date_time][lte]=' + this.shiftDateEnd.format('YYYY-MM-DD HH:mm:ss');
+      var limit = 'limit[arrivals]=12';
       return axios.get(uri + '?' + filters + '&' + limit).then(function (response) {
-        _this3.areaArrivals = response.data.data;
+        _this3.areaArrivals = response.data.data.arrivals;
 
-        _this3.debugLevel(['areaArrivals successfully loaded: ' + moment__WEBPACK_IMPORTED_MODULE_3___default()().format('YYYY-MM-DD HH:mm:ss'), _this3.areaArrivals]);
+        _this3.debugLevel(['areaArrivals successfully loaded: ' + moment__WEBPACK_IMPORTED_MODULE_3___default()().format('YYYY-MM-DD HH:mm:ss'), _this3.areaArrivals, uri + '?' + filters + '&' + limit]);
       })["catch"](function (error) {
         _this3.debugLevel(['Error in getAreaArrivals: ' + moment__WEBPACK_IMPORTED_MODULE_3___default()().format('YYYY-MM-DD HH:mm:ss'), uri + '?' + filters + '&' + limit, error]);
       });
@@ -2837,25 +2838,25 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     getNearestEvent: function getNearestEvent() {
       var _this4 = this;
 
-      var uri = '/api/catalog/' + this.roomCardDatabase + '/bookings';
-      var filters = 'filter[bookings][area_guid][e]=' + this.roomCardArea + '&filter[bookings][end_date_time][gte]=' + moment__WEBPACK_IMPORTED_MODULE_3___default()().format('YYYY-MM-DD HH:mm:ss');
-      var limit = 'limit[bookings]=1';
+      var uri = '/api/catalog/' + this.roomCardDatabase + '/areas/' + this.roomCardArea + '/arrivals';
+      var filters = 'filter[bookings][end_date_time][gte]=' + moment__WEBPACK_IMPORTED_MODULE_3___default()().format('YYYY-MM-DD HH:mm:ss');
+      var limit = 'limit[arrivals]=1';
       return axios.get(uri + '?' + filters + '&' + limit).then(function (response) {
-        _this4.nearestEvent = response.data.data;
+        _this4.nearestEvent = response.data.data.arrivals;
 
-        _this4.debugLevel(['nearestEvent successfully loaded: ' + moment__WEBPACK_IMPORTED_MODULE_3___default()().format('YYYY-MM-DD HH:mm:ss'), _this4.nearestEvent]);
+        _this4.debugLevel(['nearestEvent successfully loaded: ' + moment__WEBPACK_IMPORTED_MODULE_3___default()().format('YYYY-MM-DD HH:mm:ss'), uri + '?' + filters + '&' + limit, _this4.nearestEvent]);
       })["catch"](function (error) {
         _this4.debugLevel(['Error in getNearestEvent: ' + moment__WEBPACK_IMPORTED_MODULE_3___default()().format('YYYY-MM-DD HH:mm:ss'), uri + '?' + filters + '&' + limit, error]);
       });
     },
     getClock: function getClock() {
-      document.getElementById('time').innerHTML = moment__WEBPACK_IMPORTED_MODULE_3___default()().format('H:mm A');
+      document.getElementById('time').innerHTML = moment__WEBPACK_IMPORTED_MODULE_3___default()().format('h:mm A');
       document.getElementById('date').innerHTML = moment__WEBPACK_IMPORTED_MODULE_3___default()().format('M/D/YYYY');
     }
   },
   filters: {
     time: function time(value) {
-      return moment__WEBPACK_IMPORTED_MODULE_3___default()(value).format('H:mm A');
+      return moment__WEBPACK_IMPORTED_MODULE_3___default()(value).format('h:mm A');
     }
   },
   mounted: function () {
@@ -61843,7 +61844,7 @@ var render = function() {
         : _c(
             "div",
             {
-              staticClass: "btn-group",
+              staticClass: "d-flex justify-content-between btn-group",
               attrs: {
                 role: "group",
                 "aria-label": "Message log navigation links"
@@ -62249,7 +62250,7 @@ var render = function() {
                 _c("div", { staticClass: "col" }, [
                   _c("p", { staticClass: "text-uppercase" }, [
                     _vm._v(_vm._s(_vm.areaDesc)),
-                    _vm.areaDec != "" ? _c("span", [_vm._v(" | ")]) : _vm._e(),
+                    _vm.areaDesc != "" ? _c("span", [_vm._v(" | ")]) : _vm._e(),
                     _vm._v("TODAY'S EVENTS")
                   ])
                 ])
@@ -62282,7 +62283,7 @@ var render = function() {
                   _c("div", { staticClass: "col description" }, [
                     _vm._v(
                       "\r\n\t\t\t\t\t\t" +
-                        _vm._s(_vm.nearestEvent[0].arrival.description) +
+                        _vm._s(_vm.nearestEvent[0].description) +
                         "\r\n\t\t\t\t\t"
                     )
                   ])
@@ -62294,11 +62295,15 @@ var render = function() {
                   _vm._v(
                     "\r\n\t\t\t\t\t\t" +
                       _vm._s(
-                        _vm._f("time")(_vm.nearestEvent[0].start_date_time)
+                        _vm._f("time")(
+                          _vm.nearestEvent[0].booking_start_date_time
+                        )
                       ) +
                       " - " +
                       _vm._s(
-                        _vm._f("time")(_vm.nearestEvent[0].end_date_time)
+                        _vm._f("time")(
+                          _vm.nearestEvent[0].booking_end_date_time
+                        )
                       ) +
                       "\r\n\t\t\t\t\t"
                   )
@@ -62330,15 +62335,19 @@ var render = function() {
                 _vm._l(_vm.areaArrivals, function(arrival) {
                   return _c("div", { staticClass: "row no-gutters px-5" }, [
                     _c("div", { staticClass: "col-2 pl-4 pb-4" }, [
-                      _vm._v(_vm._s(_vm._f("time")(arrival.start_date_time)))
+                      _vm._v(
+                        _vm._s(_vm._f("time")(arrival.booking_start_date_time))
+                      )
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "col-2 pl-4 pb-4" }, [
-                      _vm._v(_vm._s(_vm._f("time")(arrival.end_date_time)))
+                      _vm._v(
+                        _vm._s(_vm._f("time")(arrival.booking_end_date_time))
+                      )
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "col-8 pl-4 pb-4" }, [
-                      _vm._v(_vm._s(arrival.arrival.description))
+                      _vm._v(_vm._s(arrival.description))
                     ])
                   ])
                 }),
