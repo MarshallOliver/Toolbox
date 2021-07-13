@@ -7,6 +7,15 @@
         "laravel"
     ],
     "license": "MIT",
+    "repositories": [
+        {
+            "type": "path",
+            "url": "workbench/laravel-centeredge-api",
+            "options": {
+                "symlink": true
+            }
+        }
+    ],
     "require": {
         "php": "^7.2.5||^8.0",
         "aikg/laravel-centeredge-api": "@dev",
