@@ -7,9 +7,18 @@
         "laravel"
     ],
     "license": "MIT",
+    "repositories": [
+        {
+            "type": "path",
+            "url": "workbench/laravel-centeredge-api",
+            "options": {
+                "symlink": true
+            }
+        }
+    ],
     "require": {
         "php": "^7.2.5||^8.0",
-        "aikg/laravel-centeredge-api": "^0.2.0-alpha",
+        "aikg/laravel-centeredge-api": "@dev",
         "fideloper/proxy": "^4.2",
         "fruitcake/laravel-cors": "^1.0",
         "guzzlehttp/guzzle": "^6.3",

@@ -2765,7 +2765,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       isLoading: true,
       areaDesc: '',
       nearestEvent: [],
-      areaArrivals: [],
+      areaBookings: [],
       shiftDateTime: moment__WEBPACK_IMPORTED_MODULE_3___default()()
     };
   },
@@ -2775,7 +2775,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   computed: {
     hasCurrentEvent: function hasCurrentEvent() {
-      return this.nearestEvent.length == 0 ? false : moment__WEBPACK_IMPORTED_MODULE_3___default()().isBetween(moment__WEBPACK_IMPORTED_MODULE_3___default()(this.nearestEvent[0].booking_start_date_time).subtract(15, 'minutes'), this.nearestEvent[0].booking_end_date_time);
+      return this.nearestEvent.length == 0 ? false : moment__WEBPACK_IMPORTED_MODULE_3___default()().isBetween(moment__WEBPACK_IMPORTED_MODULE_3___default()(this.nearestEvent[0].start_date_time).subtract(15, 'minutes'), this.nearestEvent[0].end_date_time);
     },
     shiftDateStart: function shiftDateStart() {
       return moment__WEBPACK_IMPORTED_MODULE_3___default()().set({
@@ -2800,8 +2800,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this = this;
 
       var uri = '/api/catalog/' + this.roomCardDatabase + '/application';
-      var fields = 'fields=shift_date_change_time';
-      return axios.get(uri + '?' + fields).then(function (response) {
+      return axios.get(uri).then(function (response) {
         _this.shiftDateTime = moment__WEBPACK_IMPORTED_MODULE_3___default()(response.data.data.shift_date_change_time);
 
         _this.debugLevel(['shiftDateTime successfully loaded: ' + moment__WEBPACK_IMPORTED_MODULE_3___default()().format('YYYY-MM-DD HH:mm:ss'), 'shiftDateStart: ' + _this.shiftDateStart.format('YYYY-MM-DD HH:mm:ss'), 'shiftDateEnd: ' + _this.shiftDateEnd.format('YYYY-MM-DD HH:mm:ss')]);
@@ -2821,32 +2820,30 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         _this2.debugLevel(['Error in loadAreaDesc: ' + moment__WEBPACK_IMPORTED_MODULE_3___default()().format('YYYY-MM-DD HH:mm:ss'), uri, error]);
       });
     },
-    getAreaArrivals: function getAreaArrivals() {
+    getAreaBookings: function getAreaBookings() {
       var _this3 = this;
 
-      var uri = '/api/catalog/' + this.roomCardDatabase + '/areas/' + this.roomCardArea + '/arrivals';
-      var filters = 'filter[bookings][start_date_time][gte]=' + this.shiftDateStart.format('YYYY-MM-DD HH:mm:ss') + '&filter[bookings][end_date_time][lte]=' + this.shiftDateEnd.format('YYYY-MM-DD HH:mm:ss');
-      var limit = 'limit[arrivals]=12';
-      return axios.get(uri + '?' + filters + '&' + limit).then(function (response) {
-        _this3.areaArrivals = response.data.data.arrivals;
+      var uri = '/api/catalog/' + this.roomCardDatabase + '/areas/' + this.roomCardArea + '/bookings';
+      var filters = 'filter[start_date_time][gte]=' + this.shiftDateStart.format('YYYY-MM-DD HH:mm:ss') + '&filter[end_date_time][lte]=' + this.shiftDateEnd.format('YYYY-MM-DD HH:mm:ss');
+      return axios.get(uri + '?' + filters).then(function (response) {
+        _this3.areaBookings = response.data.data;
 
-        _this3.debugLevel(['areaArrivals successfully loaded: ' + moment__WEBPACK_IMPORTED_MODULE_3___default()().format('YYYY-MM-DD HH:mm:ss'), _this3.areaArrivals, uri + '?' + filters + '&' + limit]);
+        _this3.debugLevel(['areaBookings successfully loaded: ' + moment__WEBPACK_IMPORTED_MODULE_3___default()().format('YYYY-MM-DD HH:mm:ss'), _this3.areaBookings, uri + '?' + filters]);
       })["catch"](function (error) {
-        _this3.debugLevel(['Error in getAreaArrivals: ' + moment__WEBPACK_IMPORTED_MODULE_3___default()().format('YYYY-MM-DD HH:mm:ss'), uri + '?' + filters + '&' + limit, error]);
+        _this3.debugLevel(['Error in getAreaBookings: ' + moment__WEBPACK_IMPORTED_MODULE_3___default()().format('YYYY-MM-DD HH:mm:ss'), uri + '?' + filters, error]);
       });
     },
     getNearestEvent: function getNearestEvent() {
       var _this4 = this;
 
-      var uri = '/api/catalog/' + this.roomCardDatabase + '/areas/' + this.roomCardArea + '/arrivals';
-      var filters = 'filter[bookings][end_date_time][gte]=' + moment__WEBPACK_IMPORTED_MODULE_3___default()().format('YYYY-MM-DD HH:mm:ss');
-      var limit = 'limit[arrivals]=1';
-      return axios.get(uri + '?' + filters + '&' + limit).then(function (response) {
-        _this4.nearestEvent = response.data.data.arrivals;
+      var uri = '/api/catalog/' + this.roomCardDatabase + '/areas/' + this.roomCardArea + '/bookings';
+      var filters = 'filter[end_date_time][gte]=' + moment__WEBPACK_IMPORTED_MODULE_3___default()().format('YYYY-MM-DD HH:mm:ss');
+      return axios.get(uri + '?' + filters).then(function (response) {
+        _this4.nearestEvent = response.data.data;
 
-        _this4.debugLevel(['nearestEvent successfully loaded: ' + moment__WEBPACK_IMPORTED_MODULE_3___default()().format('YYYY-MM-DD HH:mm:ss'), uri + '?' + filters + '&' + limit, _this4.nearestEvent]);
+        _this4.debugLevel(['nearestEvent successfully loaded: ' + moment__WEBPACK_IMPORTED_MODULE_3___default()().format('YYYY-MM-DD HH:mm:ss'), uri + '?' + filters, _this4.nearestEvent]);
       })["catch"](function (error) {
-        _this4.debugLevel(['Error in getNearestEvent: ' + moment__WEBPACK_IMPORTED_MODULE_3___default()().format('YYYY-MM-DD HH:mm:ss'), uri + '?' + filters + '&' + limit, error]);
+        _this4.debugLevel(['Error in getNearestEvent: ' + moment__WEBPACK_IMPORTED_MODULE_3___default()().format('YYYY-MM-DD HH:mm:ss'), uri + '?' + filters, error]);
       });
     },
     getClock: function getClock() {
@@ -2882,10 +2879,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             case 9:
               setInterval(this.getNearestEvent, 300000);
               _context.next = 12;
-              return this.getAreaArrivals();
+              return this.getAreaBookings();
 
             case 12:
-              setInterval(this.getAreaArrivals, 300000);
+              setInterval(this.getAreaBookings, 300000);
               this.isLoading = false;
 
             case 14:
@@ -18405,7 +18402,7 @@ return jQuery;
   var undefined;
 
   /** Used as the semantic version number. */
-  var VERSION = '4.17.15';
+  var VERSION = '4.17.19';
 
   /** Used as the size to enable large array optimizations. */
   var LARGE_ARRAY_SIZE = 200;
@@ -22112,8 +22109,21 @@ return jQuery;
      * @returns {Array} Returns the new sorted array.
      */
     function baseOrderBy(collection, iteratees, orders) {
+      if (iteratees.length) {
+        iteratees = arrayMap(iteratees, function(iteratee) {
+          if (isArray(iteratee)) {
+            return function(value) {
+              return baseGet(value, iteratee.length === 1 ? iteratee[0] : iteratee);
+            }
+          }
+          return iteratee;
+        });
+      } else {
+        iteratees = [identity];
+      }
+
       var index = -1;
-      iteratees = arrayMap(iteratees.length ? iteratees : [identity], baseUnary(getIteratee()));
+      iteratees = arrayMap(iteratees, baseUnary(getIteratee()));
 
       var result = baseMap(collection, function(value, key, collection) {
         var criteria = arrayMap(iteratees, function(iteratee) {
@@ -22370,6 +22380,10 @@ return jQuery;
         var key = toKey(path[index]),
             newValue = value;
 
+        if (key === '__proto__' || key === 'constructor' || key === 'prototype') {
+          return object;
+        }
+
         if (index != lastIndex) {
           var objValue = nested[key];
           newValue = customizer ? customizer(objValue, key, nested) : undefined;
@@ -22522,11 +22536,14 @@ return jQuery;
      *  into `array`.
      */
     function baseSortedIndexBy(array, value, iteratee, retHighest) {
-      value = iteratee(value);
-
       var low = 0,
-          high = array == null ? 0 : array.length,
-          valIsNaN = value !== value,
+          high = array == null ? 0 : array.length;
+      if (high === 0) {
+        return 0;
+      }
+
+      value = iteratee(value);
+      var valIsNaN = value !== value,
           valIsNull = value === null,
           valIsSymbol = isSymbol(value),
           valIsUndefined = value === undefined;
@@ -24011,10 +24028,11 @@ return jQuery;
       if (arrLength != othLength && !(isPartial && othLength > arrLength)) {
         return false;
       }
-      // Assume cyclic values are equal.
-      var stacked = stack.get(array);
-      if (stacked && stack.get(other)) {
-        return stacked == other;
+      // Check that cyclic values are equal.
+      var arrStacked = stack.get(array);
+      var othStacked = stack.get(other);
+      if (arrStacked && othStacked) {
+        return arrStacked == other && othStacked == array;
       }
       var index = -1,
           result = true,
@@ -24176,10 +24194,11 @@ return jQuery;
           return false;
         }
       }
-      // Assume cyclic values are equal.
-      var stacked = stack.get(object);
-      if (stacked && stack.get(other)) {
-        return stacked == other;
+      // Check that cyclic values are equal.
+      var objStacked = stack.get(object);
+      var othStacked = stack.get(other);
+      if (objStacked && othStacked) {
+        return objStacked == other && othStacked == object;
       }
       var result = true;
       stack.set(object, other);
@@ -27560,6 +27579,10 @@ return jQuery;
      * // The `_.property` iteratee shorthand.
      * _.filter(users, 'active');
      * // => objects for ['barney']
+     *
+     * // Combining several predicates using `_.overEvery` or `_.overSome`.
+     * _.filter(users, _.overSome([{ 'age': 36 }, ['age', 40]]));
+     * // => objects for ['fred', 'barney']
      */
     function filter(collection, predicate) {
       var func = isArray(collection) ? arrayFilter : baseFilter;
@@ -28309,15 +28332,15 @@ return jQuery;
      * var users = [
      *   { 'user': 'fred',   'age': 48 },
      *   { 'user': 'barney', 'age': 36 },
-     *   { 'user': 'fred',   'age': 40 },
+     *   { 'user': 'fred',   'age': 30 },
      *   { 'user': 'barney', 'age': 34 }
      * ];
      *
      * _.sortBy(users, [function(o) { return o.user; }]);
-     * // => objects for [['barney', 36], ['barney', 34], ['fred', 48], ['fred', 40]]
+     * // => objects for [['barney', 36], ['barney', 34], ['fred', 48], ['fred', 30]]
      *
      * _.sortBy(users, ['user', 'age']);
-     * // => objects for [['barney', 34], ['barney', 36], ['fred', 40], ['fred', 48]]
+     * // => objects for [['barney', 34], ['barney', 36], ['fred', 30], ['fred', 48]]
      */
     var sortBy = baseRest(function(collection, iteratees) {
       if (collection == null) {
@@ -33192,11 +33215,11 @@ return jQuery;
 
       // Use a sourceURL for easier debugging.
       // The sourceURL gets injected into the source that's eval-ed, so be careful
-      // with lookup (in case of e.g. prototype pollution), and strip newlines if any.
-      // A newline wouldn't be a valid sourceURL anyway, and it'd enable code injection.
+      // to normalize all kinds of whitespace, so e.g. newlines (and unicode versions of it) can't sneak in
+      // and escape the comment, thus injecting code that gets evaled.
       var sourceURL = '//# sourceURL=' +
         (hasOwnProperty.call(options, 'sourceURL')
-          ? (options.sourceURL + '').replace(/[\r\n]/g, ' ')
+          ? (options.sourceURL + '').replace(/\s/g, ' ')
           : ('lodash.templateSources[' + (++templateCounter) + ']')
         ) + '\n';
 
@@ -33229,8 +33252,6 @@ return jQuery;
 
       // If `variable` is not specified wrap a with-statement around the generated
       // code to add the data object to the top of the scope chain.
-      // Like with sourceURL, we take care to not check the option's prototype,
-      // as this configuration is a code injection vector.
       var variable = hasOwnProperty.call(options, 'variable') && options.variable;
       if (!variable) {
         source = 'with (obj) {\n' + source + '\n}\n';
@@ -33937,6 +33958,9 @@ return jQuery;
      * values against any array or object value, respectively. See `_.isEqual`
      * for a list of supported value comparisons.
      *
+     * **Note:** Multiple values can be checked by combining several matchers
+     * using `_.overSome`
+     *
      * @static
      * @memberOf _
      * @since 3.0.0
@@ -33952,6 +33976,10 @@ return jQuery;
      *
      * _.filter(objects, _.matches({ 'a': 4, 'c': 6 }));
      * // => [{ 'a': 4, 'b': 5, 'c': 6 }]
+     *
+     * // Checking for several possible values
+     * _.filter(users, _.overSome([_.matches({ 'a': 1 }), _.matches({ 'a': 4 })]));
+     * // => [{ 'a': 1, 'b': 2, 'c': 3 }, { 'a': 4, 'b': 5, 'c': 6 }]
      */
     function matches(source) {
       return baseMatches(baseClone(source, CLONE_DEEP_FLAG));
@@ -33965,6 +33993,9 @@ return jQuery;
      * **Note:** Partial comparisons will match empty array and empty object
      * `srcValue` values against any array or object value, respectively. See
      * `_.isEqual` for a list of supported value comparisons.
+     *
+     * **Note:** Multiple values can be checked by combining several matchers
+     * using `_.overSome`
      *
      * @static
      * @memberOf _
@@ -33982,6 +34013,10 @@ return jQuery;
      *
      * _.find(objects, _.matchesProperty('a', 4));
      * // => { 'a': 4, 'b': 5, 'c': 6 }
+     *
+     * // Checking for several possible values
+     * _.filter(users, _.overSome([_.matchesProperty('a', 1), _.matchesProperty('a', 4)]));
+     * // => [{ 'a': 1, 'b': 2, 'c': 3 }, { 'a': 4, 'b': 5, 'c': 6 }]
      */
     function matchesProperty(path, srcValue) {
       return baseMatchesProperty(path, baseClone(srcValue, CLONE_DEEP_FLAG));
@@ -34205,6 +34240,10 @@ return jQuery;
      * Creates a function that checks if **all** of the `predicates` return
      * truthy when invoked with the arguments it receives.
      *
+     * Following shorthands are possible for providing predicates.
+     * Pass an `Object` and it will be used as an parameter for `_.matches` to create the predicate.
+     * Pass an `Array` of parameters for `_.matchesProperty` and the predicate will be created using them.
+     *
      * @static
      * @memberOf _
      * @since 4.0.0
@@ -34231,6 +34270,10 @@ return jQuery;
      * Creates a function that checks if **any** of the `predicates` return
      * truthy when invoked with the arguments it receives.
      *
+     * Following shorthands are possible for providing predicates.
+     * Pass an `Object` and it will be used as an parameter for `_.matches` to create the predicate.
+     * Pass an `Array` of parameters for `_.matchesProperty` and the predicate will be created using them.
+     *
      * @static
      * @memberOf _
      * @since 4.0.0
@@ -34250,6 +34293,9 @@ return jQuery;
      *
      * func(NaN);
      * // => false
+     *
+     * var matchesFunc = _.overSome([{ 'a': 1 }, { 'a': 2 }])
+     * var matchesPropertyFunc = _.overSome([['a', 1], ['a', 2]])
      */
     var overSome = createOver(arraySome);
 
@@ -35736,6 +35782,8 @@ var map = {
 	"./tg.js": "./node_modules/moment/locale/tg.js",
 	"./th": "./node_modules/moment/locale/th.js",
 	"./th.js": "./node_modules/moment/locale/th.js",
+	"./tk": "./node_modules/moment/locale/tk.js",
+	"./tk.js": "./node_modules/moment/locale/tk.js",
 	"./tl-ph": "./node_modules/moment/locale/tl-ph.js",
 	"./tl-ph.js": "./node_modules/moment/locale/tl-ph.js",
 	"./tlh": "./node_modules/moment/locale/tlh.js",
@@ -38509,6 +38557,7 @@ webpackContext.id = "./node_modules/moment/locale sync recursive ^\\.\\/.*$";
             h: ['eine Stunde', 'einer Stunde'],
             d: ['ein Tag', 'einem Tag'],
             dd: [number + ' Tage', number + ' Tagen'],
+            w: ['eine Woche', 'einer Woche'],
             M: ['ein Monat', 'einem Monat'],
             MM: [number + ' Monate', number + ' Monaten'],
             y: ['ein Jahr', 'einem Jahr'],
@@ -38558,6 +38607,8 @@ webpackContext.id = "./node_modules/moment/locale sync recursive ^\\.\\/.*$";
             hh: '%d Stunden',
             d: processRelativeTime,
             dd: processRelativeTime,
+            w: processRelativeTime,
+            ww: '%d Wochen',
             M: processRelativeTime,
             MM: processRelativeTime,
             y: processRelativeTime,
@@ -38602,6 +38653,7 @@ webpackContext.id = "./node_modules/moment/locale sync recursive ^\\.\\/.*$";
             h: ['eine Stunde', 'einer Stunde'],
             d: ['ein Tag', 'einem Tag'],
             dd: [number + ' Tage', number + ' Tagen'],
+            w: ['eine Woche', 'einer Woche'],
             M: ['ein Monat', 'einem Monat'],
             MM: [number + ' Monate', number + ' Monaten'],
             y: ['ein Jahr', 'einem Jahr'],
@@ -38651,6 +38703,8 @@ webpackContext.id = "./node_modules/moment/locale sync recursive ^\\.\\/.*$";
             hh: '%d Stunden',
             d: processRelativeTime,
             dd: processRelativeTime,
+            w: processRelativeTime,
+            ww: '%d Wochen',
             M: processRelativeTime,
             MM: processRelativeTime,
             y: processRelativeTime,
@@ -38697,6 +38751,7 @@ webpackContext.id = "./node_modules/moment/locale sync recursive ^\\.\\/.*$";
             h: ['eine Stunde', 'einer Stunde'],
             d: ['ein Tag', 'einem Tag'],
             dd: [number + ' Tage', number + ' Tagen'],
+            w: ['eine Woche', 'einer Woche'],
             M: ['ein Monat', 'einem Monat'],
             MM: [number + ' Monate', number + ' Monaten'],
             y: ['ein Jahr', 'einem Jahr'],
@@ -38746,6 +38801,8 @@ webpackContext.id = "./node_modules/moment/locale sync recursive ^\\.\\/.*$";
             hh: '%d Stunden',
             d: processRelativeTime,
             dd: processRelativeTime,
+            w: processRelativeTime,
+            ww: '%d Wochen',
             M: processRelativeTime,
             MM: processRelativeTime,
             y: processRelativeTime,
@@ -40504,7 +40561,8 @@ webpackContext.id = "./node_modules/moment/locale sync recursive ^\\.\\/.*$";
             case 's':
                 return isFuture ? 'muutaman sekunnin' : 'muutama sekunti';
             case 'ss':
-                return isFuture ? 'sekunnin' : 'sekuntia';
+                result = isFuture ? 'sekunnin' : 'sekuntia';
+                break;
             case 'm':
                 return isFuture ? 'minuutin' : 'minuutti';
             case 'mm':
@@ -40959,6 +41017,24 @@ webpackContext.id = "./node_modules/moment/locale sync recursive ^\\.\\/.*$";
 
     //! moment.js locale configuration
 
+    var monthsStrictRegex = /^(janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre)/i,
+        monthsShortStrictRegex = /(janv\.?|févr\.?|mars|avr\.?|mai|juin|juil\.?|août|sept\.?|oct\.?|nov\.?|déc\.?)/i,
+        monthsRegex = /(janv\.?|févr\.?|mars|avr\.?|mai|juin|juil\.?|août|sept\.?|oct\.?|nov\.?|déc\.?|janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre)/i,
+        monthsParse = [
+            /^janv/i,
+            /^févr/i,
+            /^mars/i,
+            /^avr/i,
+            /^mai/i,
+            /^juin/i,
+            /^juil/i,
+            /^août/i,
+            /^sept/i,
+            /^oct/i,
+            /^nov/i,
+            /^déc/i,
+        ];
+
     var fr = moment.defineLocale('fr', {
         months: 'janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre'.split(
             '_'
@@ -40966,7 +41042,13 @@ webpackContext.id = "./node_modules/moment/locale sync recursive ^\\.\\/.*$";
         monthsShort: 'janv._févr._mars_avr._mai_juin_juil._août_sept._oct._nov._déc.'.split(
             '_'
         ),
-        monthsParseExact: true,
+        monthsRegex: monthsRegex,
+        monthsShortRegex: monthsRegex,
+        monthsStrictRegex: monthsStrictRegex,
+        monthsShortStrictRegex: monthsShortStrictRegex,
+        monthsParse: monthsParse,
+        longMonthsParse: monthsParse,
+        shortMonthsParse: monthsParse,
         weekdays: 'dimanche_lundi_mardi_mercredi_jeudi_vendredi_samedi'.split('_'),
         weekdaysShort: 'dim._lun._mar._mer._jeu._ven._sam.'.split('_'),
         weekdaysMin: 'di_lu_ma_me_je_ve_sa'.split('_'),
@@ -41822,7 +41904,7 @@ webpackContext.id = "./node_modules/moment/locale sync recursive ^\\.\\/.*$";
         },
         relativeTime: {
             future: '%s મા',
-            past: '%s પેહલા',
+            past: '%s પહેલા',
             s: 'અમુક પળો',
             ss: '%d સેકંડ',
             m: 'એક મિનિટ',
@@ -42997,9 +43079,7 @@ webpackContext.id = "./node_modules/moment/locale sync recursive ^\\.\\/.*$";
             sameElse: 'L',
         },
         relativeTime: {
-            future: function (s) {
-                return (/^[0-9].+$/.test(s) ? 'tra' : 'in') + ' ' + s;
-            },
+            future: 'tra %s',
             past: '%s fa',
             s: 'alcuni secondi',
             ss: '%d secondi',
@@ -48349,7 +48429,7 @@ webpackContext.id = "./node_modules/moment/locale sync recursive ^\\.\\/.*$";
         weekdaysMin: 'J2_J3_J4_J5_Al_Ij_J1'.split('_'),
         weekdaysParseExact: true,
         longDateFormat: {
-            LT: 'HH:mm',
+            LT: 'hh:mm A',
             LTS: 'HH:mm:ss',
             L: 'DD.MM.YYYY',
             LL: 'D MMMM YYYY',
@@ -48943,6 +49023,117 @@ webpackContext.id = "./node_modules/moment/locale sync recursive ^\\.\\/.*$";
     });
 
     return th;
+
+})));
+
+
+/***/ }),
+
+/***/ "./node_modules/moment/locale/tk.js":
+/*!******************************************!*\
+  !*** ./node_modules/moment/locale/tk.js ***!
+  \******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+//! moment.js locale configuration
+//! locale : Turkmen [trk]
+//! author : Atamyrat Abdyrahmanov : https://github.com/atamyratabdy
+
+;(function (global, factory) {
+    true ? factory(__webpack_require__(/*! ../moment */ "./node_modules/moment/moment.js")) :
+   undefined
+}(this, (function (moment) { 'use strict';
+
+    //! moment.js locale configuration
+
+    var suffixes = {
+        1: "'inji",
+        5: "'inji",
+        8: "'inji",
+        70: "'inji",
+        80: "'inji",
+        2: "'nji",
+        7: "'nji",
+        20: "'nji",
+        50: "'nji",
+        3: "'ünji",
+        4: "'ünji",
+        100: "'ünji",
+        6: "'njy",
+        9: "'unjy",
+        10: "'unjy",
+        30: "'unjy",
+        60: "'ynjy",
+        90: "'ynjy",
+    };
+
+    var tk = moment.defineLocale('tk', {
+        months: 'Ýanwar_Fewral_Mart_Aprel_Maý_Iýun_Iýul_Awgust_Sentýabr_Oktýabr_Noýabr_Dekabr'.split(
+            '_'
+        ),
+        monthsShort: 'Ýan_Few_Mar_Apr_Maý_Iýn_Iýl_Awg_Sen_Okt_Noý_Dek'.split('_'),
+        weekdays: 'Ýekşenbe_Duşenbe_Sişenbe_Çarşenbe_Penşenbe_Anna_Şenbe'.split(
+            '_'
+        ),
+        weekdaysShort: 'Ýek_Duş_Siş_Çar_Pen_Ann_Şen'.split('_'),
+        weekdaysMin: 'Ýk_Dş_Sş_Çr_Pn_An_Şn'.split('_'),
+        longDateFormat: {
+            LT: 'HH:mm',
+            LTS: 'HH:mm:ss',
+            L: 'DD.MM.YYYY',
+            LL: 'D MMMM YYYY',
+            LLL: 'D MMMM YYYY HH:mm',
+            LLLL: 'dddd, D MMMM YYYY HH:mm',
+        },
+        calendar: {
+            sameDay: '[bugün sagat] LT',
+            nextDay: '[ertir sagat] LT',
+            nextWeek: '[indiki] dddd [sagat] LT',
+            lastDay: '[düýn] LT',
+            lastWeek: '[geçen] dddd [sagat] LT',
+            sameElse: 'L',
+        },
+        relativeTime: {
+            future: '%s soň',
+            past: '%s öň',
+            s: 'birnäçe sekunt',
+            m: 'bir minut',
+            mm: '%d minut',
+            h: 'bir sagat',
+            hh: '%d sagat',
+            d: 'bir gün',
+            dd: '%d gün',
+            M: 'bir aý',
+            MM: '%d aý',
+            y: 'bir ýyl',
+            yy: '%d ýyl',
+        },
+        ordinal: function (number, period) {
+            switch (period) {
+                case 'd':
+                case 'D':
+                case 'Do':
+                case 'DD':
+                    return number;
+                default:
+                    if (number === 0) {
+                        // special case for zero
+                        return number + "'unjy";
+                    }
+                    var a = number % 10,
+                        b = (number % 100) - a,
+                        c = number >= 100 ? 100 : null;
+                    return number + (suffixes[a] || suffixes[b] || suffixes[c]);
+            }
+        },
+        week: {
+            dow: 1, // Monday is the first day of the week.
+            doy: 7, // The week that contains Jan 7th is the first week of the year.
+        },
+    });
+
+    return tk;
 
 })));
 
@@ -50132,7 +50323,7 @@ webpackContext.id = "./node_modules/moment/locale sync recursive ^\\.\\/.*$";
         months: 'tháng 1_tháng 2_tháng 3_tháng 4_tháng 5_tháng 6_tháng 7_tháng 8_tháng 9_tháng 10_tháng 11_tháng 12'.split(
             '_'
         ),
-        monthsShort: 'Th01_Th02_Th03_Th04_Th05_Th06_Th07_Th08_Th09_Th10_Th11_Th12'.split(
+        monthsShort: 'Thg 01_Thg 02_Thg 03_Thg 04_Thg 05_Thg 06_Thg 07_Thg 08_Thg 09_Thg 10_Thg 11_Thg 12'.split(
             '_'
         ),
         monthsParseExact: true,
@@ -50876,7 +51067,7 @@ webpackContext.id = "./node_modules/moment/locale sync recursive ^\\.\\/.*$";
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module) {var require;//! moment.js
-//! version : 2.26.0
+//! version : 2.27.0
 //! authors : Tim Wood, Iskren Chernev, Moment.js contributors
 //! license : MIT
 //! momentjs.com
@@ -56494,7 +56685,7 @@ webpackContext.id = "./node_modules/moment/locale sync recursive ^\\.\\/.*$";
 
     //! moment.js
 
-    hooks.version = '2.26.0';
+    hooks.version = '2.27.0';
 
     setHookCallback(createLocal);
 
@@ -62242,7 +62433,7 @@ var render = function() {
       1
     ),
     _vm._v(" "),
-    _vm.areaArrivals.length == 0
+    _vm.areaBookings.length == 0
       ? _c("div", { staticClass: "row no-gutters flex-grow-1 no-events" }, [
           _c("div", { staticClass: "col" }, [
             _c("div", { staticClass: "d-flex flex-column h-100" }, [
@@ -62283,7 +62474,7 @@ var render = function() {
                   _c("div", { staticClass: "col description" }, [
                     _vm._v(
                       "\r\n\t\t\t\t\t\t" +
-                        _vm._s(_vm.nearestEvent[0].description) +
+                        _vm._s(_vm.nearestEvent[0].arrival_info.description) +
                         "\r\n\t\t\t\t\t"
                     )
                   ])
@@ -62295,15 +62486,11 @@ var render = function() {
                   _vm._v(
                     "\r\n\t\t\t\t\t\t" +
                       _vm._s(
-                        _vm._f("time")(
-                          _vm.nearestEvent[0].booking_start_date_time
-                        )
+                        _vm._f("time")(_vm.nearestEvent[0].start_date_time)
                       ) +
                       " - " +
                       _vm._s(
-                        _vm._f("time")(
-                          _vm.nearestEvent[0].booking_end_date_time
-                        )
+                        _vm._f("time")(_vm.nearestEvent[0].end_date_time)
                       ) +
                       "\r\n\t\t\t\t\t"
                   )
@@ -62332,22 +62519,18 @@ var render = function() {
               _c(
                 "div",
                 { staticClass: "d-flex flex-column flex-grow-1 pb-3 body" },
-                _vm._l(_vm.areaArrivals, function(arrival) {
+                _vm._l(_vm.areaBookings, function(arrival) {
                   return _c("div", { staticClass: "row no-gutters px-5" }, [
                     _c("div", { staticClass: "col-2 pl-4 pb-4" }, [
-                      _vm._v(
-                        _vm._s(_vm._f("time")(arrival.booking_start_date_time))
-                      )
+                      _vm._v(_vm._s(_vm._f("time")(arrival.start_date_time)))
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "col-2 pl-4 pb-4" }, [
-                      _vm._v(
-                        _vm._s(_vm._f("time")(arrival.booking_end_date_time))
-                      )
+                      _vm._v(_vm._s(_vm._f("time")(arrival.end_date_time)))
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "col-8 pl-4 pb-4" }, [
-                      _vm._v(_vm._s(arrival.description))
+                      _vm._v(_vm._s(arrival.arrival_info.description))
                     ])
                   ])
                 }),
